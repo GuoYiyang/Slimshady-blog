@@ -4,5 +4,5 @@
 
 [下滑阅读]()
 
-![](图片/bg.jpg)
+![bg](https://s1.ax1x.com/2020/04/10/GTowm8.jpg)
 
