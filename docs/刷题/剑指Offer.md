@@ -957,7 +957,8 @@ public class Solution {
 ```java
 public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
 	ArrayList<Integer> result = new ArrayList<Integer>();
-    if(k<= 0 || k > input.length)return result;
+    if(k<= 0 || k > input.length)
+        return result;
     //初次排序，完成k个元素的排序
     for(int i = 1; i< k; i++){
         int j = i-1;
