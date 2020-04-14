@@ -164,7 +164,7 @@ HTTP协议中定义了浏览器和服务器进行交互的不同方法，基本�
 
 #### 连接管理
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/HTTP1_x_Connections.png)
+<img src="https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/HTTP1_x_Connections.png" alt="img" style="zoom:67%;" />
 
 ##### 1. 短连接与长连接
 
