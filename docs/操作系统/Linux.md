@@ -969,7 +969,7 @@ $ split [-bl] file PREFIX
 
 #### grep
 
-g/re/p（globally search a regular expression and print)，使用正则表示式进行全局查找并打印。
+grep（globally search a regular expression and print)，使用正则表示式进行全局查找并打印。
 
 ```html
 $ grep [-acinv] [--color=auto] 搜寻字符串 filename
