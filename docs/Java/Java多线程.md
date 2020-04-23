@@ -729,9 +729,8 @@ volatile 常用于多线程环境下的单次操作(单次读或者单次写)。
 
 **volatile 变量和 atomic 变量有什么不同？**
 
--   volatile 变量可以确保先行关系，即写操作会发生在后续的读操作之前, 但它并不能保证原子性。例如用 volatile 修饰 count 变量，那么 count++ 操作就不是原子性的。
+-   volatile 变量可以确保先行关系，即写操作会发生在后续的读操作之前, 但它并**不能保证原子性**。例如用 volatile 修饰 count 变量，那么 count++ 操作就不是原子性的。
 -   而 AtomicInteger 类提供的 atomic 方法可以让这种操作具有原子性，如getAndIncrement()方法会原子性的进行增量操作把当前值加1，其它数据类型和引用变量也可以进行相似操作。
-
 
 **volatile 能使得一个非原子操作变成原子操作吗？**
 
@@ -914,13 +913,9 @@ ThreadLocal 是一个本地线程副本变量工具类，在每个线程中都�
 
 经典的使用场景是为每个线程分配一个 JDBC 连接 Connection。这样就可以保证每个线程的都在各自的 Connection 上进行数据库的操作，不会出现 A 线程关了 B线程正在使用的 Connection； 还有 Session 管理 等问题。
 
-**什么是线程局部变量？**
-
-线程局部变量是局限于线程内部的变量，属于线程自身所有，不在多个线程间共享。Java 提供 ThreadLocal 类来支持线程局部变量，是一种实现线程安全的方式。但是在管理环境下（如 web 服务器）使用线程局部变量的时候要特别小心，在这种情况下，工作线程的生命周期比任何应用变量的生命周期都要长。任何线程局部变量一旦在工作完成后没有释放，Java 应用就存在内存泄露的风险。
-
 **ThreadLocal造成内存泄漏的原因？**
 
-ThreadLocalMap 中使用的 key 为 ThreadLocal 的弱引用,而 value 是强引用。所以，如果 ThreadLocal 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。这样一来，ThreadLocalMap 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 set()、get()、remove() 方法的时候，会清理掉 key 为 null 的记录。使用完 ThreadLocal方法后，最好手动调用remove()方法
+ThreadLocalMap 中使用的 key 为 ThreadLocal 的弱引用，而 value 是强引用。所以，如果 ThreadLocal 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉。这样一来，ThreadLocalMap 中就会出现key为null的Entry。假如我们不做任何措施的话，value 永远无法被GC 回收，这个时候就可能会产生内存泄露。ThreadLocalMap实现中已经考虑了这种情况，在调用 set()、get()、remove() 方法的时候，会清理掉 key 为 null 的记录。使用完 ThreadLocal方法后，最好手动调用remove()方法。
 
 **ThreadLocal内存泄漏解决方案？**
 
@@ -974,6 +969,19 @@ BlockingQueue 接口是 Queue 的子接口，它的主要用途并不是作为�
 3.  **newCachedThreadPool：**创建一个可缓存的线程池。如果线程池的大小超过了处理任务所需要的线程，那么就会回收部分空闲（60 秒不执行任务）的线程，当任务数增加时，此线程池又可以智能的添加新线程来处理任务。此线程池不会对线程池大小做限制，线程池大小完全依赖于操作系统（或者说 JVM）能够创建的最大线程大小。
 4.  **newScheduledThreadPool：**创建一个大小无限的线程池。此线程池支持定时以及周期性执行任务的需求。
 
+**ThreadPoolExecutor 3 个最重要的参数：**
+
+1.  corePoolSize ：核心线程数，线程数定义了最小可以同时运行的线程数量。
+2.  maximumPoolSize ：线程池中允许存在的工作线程的最大数量
+3.  workQueue：当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
+
+其他常见参数:
+
+1.  keepAliveTime：线程池中的线程数量大于 corePoolSize 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 keepAliveTime才会被回收销毁；
+2.  unit ：keepAliveTime 参数的时间单位。
+3.  threadFactory：为线程池提供创建新线程的线程工厂
+4.  handler ：线程池任务队列超过 maxinumPoolSize 之后的拒绝策略
+
 **线程池有什么优点？**
 
 -   降低资源消耗：重用存在的线程，减少对象创建销毁的开销。
@@ -1007,19 +1015,6 @@ Executors 各个方法的弊端：
 ThreaPoolExecutor创建线程池方式只有一种，就是走它的构造函数，参数自己指定
 
 ThreadPoolExecutor() 是最原始的线程池创建，也是阿里巴巴 Java 开发手册中明确规范的创建线程池的方式。
-
-**ThreadPoolExecutor 3 个最重要的参数：**
-
-1.  corePoolSize ：核心线程数，线程数定义了最小可以同时运行的线程数量。
-2.  maximumPoolSize ：线程池中允许存在的工作线程的最大数量
-3.  workQueue：当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
-
-其他常见参数:
-
-1.  keepAliveTime：线程池中的线程数量大于 corePoolSize 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 keepAliveTime才会被回收销毁；
-2.  unit ：keepAliveTime 参数的时间单位。
-3.  threadFactory：为线程池提供创建新线程的线程工厂
-4.  handler ：线程池任务队列超过 maxinumPoolSize 之后的拒绝策略
 
 **ThreadPoolExecutor饱和策略**
 
