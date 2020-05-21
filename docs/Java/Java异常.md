@@ -8,7 +8,7 @@ Java异常机制可以使程序中异常处理代码和正常业务代码分离�
 
 #### Java异常架构
 
-![Java异常架构](../图片/Java异常架构.png)
+![Java异常架构](https://tva1.sinaimg.cn/large/007S8ZIlly1gf004dqrsxj30xg0nbjvw.jpg)
 
 ##### Throwable
 
@@ -70,7 +70,7 @@ Java 通过面向对象的方法进行异常处理，一旦方法抛出异常，
 
 在Java应用中，异常的处理机制分为声明异常，抛出异常和捕获异常。
 
-![异常处理](../图片/异常处理.jpg)
+![异常处理](https://tva1.sinaimg.cn/large/007S8ZIlly1gf004ek2suj30t60h7myw.jpg)
 
 ##### 声明异常
 

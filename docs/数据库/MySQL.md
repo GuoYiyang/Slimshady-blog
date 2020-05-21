@@ -221,7 +221,7 @@ BTree是最常用的mysql数据库索引算法，也是mysql默认的算法。�
 
 普通索引区：si(关联的id的地址,然后再到达上面的地址)。所以按主键查询,速度最快
 
-![B+树](../图片/B+树.jpg)
+![B+树](https://tva1.sinaimg.cn/large/007S8ZIlly1gf0047yhhzj30ma0b9aax.jpg)
 
 **B+树性质：**
 
