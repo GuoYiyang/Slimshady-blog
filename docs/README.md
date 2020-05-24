@@ -1,18 +1,16 @@
 ## Java
 
-[Java基础](Java\Java基础.md) 
+[Java基础](Java\Java基础.md)
 
 [Java多线程](Java/Java多线程.md)
 
-[Java集合](Java/Java集合.md) 
+[Java集合](Java/Java集合.md)
 
-[Java虚拟机](Java/Java虚拟机.md) 
+[Java虚拟机](Java/Java虚拟机.md)
 
-[Java异常](Java/Java异常.md) 
+[Java异常](Java/Java异常.md)
 
-[Java设计模式](Java/Java设计模式.md) 
-
-[JavaIO](Java/JavaIO.md) 
+[Java设计模式](Java/Java设计模式.md)
 
 ---
 
@@ -21,8 +19,6 @@
 [计算机网络](网络\计算机网络.md) 
 
 [HTTP协议](网络\HTTP协议.md) 
-
-[Socket](网络\Socket.md) 
 
 ------
 

@@ -1,24 +1,24 @@
-## HTTP协议
+# HTTP协议
 
-### 一 、基础概念
+## 基础概念
 
 #### URI
 
 URI 包含 URL 和 URN。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/8441b2c4-dca7-4d6b-8efb-f22efccaf331.png)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3uk2nss6j30l60b70tf.jpg" alt="img" style="zoom: 67%;" />
 
 #### 请求和响应报文
 
-##### 1. 请求报文
+##### 请求报文
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/HTTP_RequestMessageExample.png)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u5vb108j30i80650t3.jpg)
 
-##### 2. 响应报文
+##### 响应报文
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/HTTP_ResponseMessageExample.png)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u5w0jksj30jk07f0t6.jpg)
 
-### 二、HTTP 方法
+## HTTP 方法
 
 HTTP全称为Hyper Text Transfer Protocol，中文翻译为超文本传输协议，目的是保证浏览器与服务器之间的通信。HTTP的工作方式是客户端与服务器之间的请求-应答协议。
 
@@ -44,7 +44,7 @@ HTTP协议中定义了浏览器和服务器进行交互的不同方法，基本�
 5.  GET产生一个TCP数据包；POST产生两个TCP数据包。对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。
 
 
-### 三、HTTP 状态码
+## HTTP 状态码
 
 服务器返回的 **响应报文** 中第一行为状态行，包含了状态码以及原因短语，用来告知客户端请求的结果。
 
@@ -87,7 +87,7 @@ HTTP协议中定义了浏览器和服务器进行交互的不同方法，基本�
 -   **500 Internal Server Error** ：服务器正在执行请求时发生错误。
 -   **503 Service Unavailable** ：服务器暂时处于超负载或正在进行停机维护，现在无法处理请求。
 
-### 四、HTTP 首部
+## HTTP 首部
 
 有 4 种类型的首部字段：通用首部字段、请求首部字段、响应首部字段和实体首部字段。
 
@@ -160,7 +160,7 @@ HTTP协议中定义了浏览器和服务器进行交互的不同方法，基本�
 | Expires          | 实体主体过期的日期时间 |
 | Last-Modified    | 资源的最后修改日期时间 |
 
-### 五、具体应用
+## 具体应用
 
 #### 连接管理
 
@@ -321,8 +321,6 @@ Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT
 If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT
 ```
 
-
-
 #### 内容协商
 
 通过内容协商返回最合适的内容，例如根据浏览器的默认语言选择返回中文界面还是英文界面。
@@ -353,8 +351,6 @@ Vary: Accept-Language
 
 例如，一个客户端发送了一个包含 Accept-Language 首部字段的请求之后，源服务器返回的响应包含 `Vary: Accept-Language` 内容，缓存服务器对这个响应进行缓存之后，在客户端下一次访问同一个 URL 资源，并且 Accept-Language 与缓存中的对应的值相同时才会返回该缓存。
 
-
-
 #### 内容编码
 
 内容编码将实体主体进行压缩，从而减少传输的数据量。
@@ -362,8 +358,6 @@ Vary: Accept-Language
 常用的内容编码有：gzip、compress、deflate、identity。
 
 浏览器发送 Accept-Encoding 首部，其中包含有它所支持的压缩算法，以及各自的优先级。服务器则从中选择一种，使用该算法对响应的消息主体进行压缩，并且发送 Content-Encoding 首部来告知浏览器它选择了哪一种算法。由于该内容协商过程是基于编码类型来选择资源的展现形式的，响应报文的 Vary 首部字段至少要包含 Content-Encoding。
-
-
 
 #### 范围请求
 
@@ -403,13 +397,9 @@ Accept-Ranges: bytes
 -   在请求的范围越界的情况下，服务器会返回 416 Requested Range Not Satisfiable 状态码。
 -   在不支持范围请求的情况下，服务器会返回 200 OK 状态码。
 
-
-
 #### 分块传输编码
 
 Chunked Transfer Encoding，可以把数据分割成多块，让浏览器逐步显示页面。
-
-
 
 #### 多部分对象集合
 
@@ -432,13 +422,9 @@ Content-Type: text/plain
 --AaB03x--
 ```
 
-
-
 #### 虚拟主机
 
 HTTP/1.1 使用虚拟主机技术，使得一台服务器拥有多个域名，并且在逻辑上可以看成多个服务器。
-
-
 
 #### 通信数据转发
 
@@ -457,13 +443,11 @@ HTTP/1.1 使用虚拟主机技术，使得一台服务器拥有多个域名，�
 
 -   用户察觉得到正向代理的存在。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/a314bb79-5b18-4e63-a976-3448bffa6f1b.png)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u5wvhalj30en04q0sr.jpg)
 
 -   而反向代理一般位于内部网络中，用户察觉不到。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/2d09a847-b854-439c-9198-b29c65810944.png)
-
-
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u5xy32ej30cz04v0st.jpg)
 
 ##### 2. 网关
 
@@ -473,7 +457,7 @@ HTTP/1.1 使用虚拟主机技术，使得一台服务器拥有多个域名，�
 
 使用 SSL 等加密手段，在客户端和服务器之间建立一条安全的通信线路。
 
-### 六、HTTPS
+## HTTPS
 
 HTTP 有以下安全性问题：
 
@@ -485,7 +469,7 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 
 通过使用 SSL，HTTPS 具有了加密（防窃听）、认证（防伪装）和完整性保护（防篡改）。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/ssl-offloading.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u5zi113j30un09l0uo.jpg" alt="img" style="zoom:67%;" />
 
 #### 加密
 
@@ -496,7 +480,7 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 -   优点：运算速度快；
 -   缺点：无法安全地将密钥传输给通信方。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/7fffa4b8-b36d-471f-ad0c-a88ee763bb76.png)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u60rbqhj30lg0a90tg.jpg" alt="img" style="zoom:67%;" />
 
 ##### 2.非对称密钥加密
 
@@ -509,7 +493,7 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 -   优点：可以更安全地将公开密钥传输给通信发送方；
 -   缺点：运算速度慢。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/39ccb299-ee99-4dd1-b8b4-2f9ec9495cb4.png)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u61pwnmj30ln0ax0tj.jpg" alt="img" style="zoom:67%;" />
 
 ##### 3. HTTPS 采用的加密方式
 
@@ -517,8 +501,6 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 
 -   使用非对称密钥加密方式，传输对称密钥加密方式所需要的 Secret Key，从而保证安全性;
 -   获取到 Secret Key 后，再使用对称密钥加密方式进行通信，从而保证效率。
-
-
 
 #### 认证
 
@@ -530,8 +512,6 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 
 进行 HTTPS 通信时，服务器会把证书发送给客户端。客户端取得其中的公开密钥之后，先使用数字签名进行验证，如果验证通过，就可以开始通信了。
 
-
-
 #### 完整性保护
 
 SSL 提供报文摘要功能来进行完整性保护。
@@ -540,14 +520,12 @@ HTTP 也提供了 MD5 报文摘要功能，但不是安全的。例如报文内�
 
 HTTPS 的报文摘要功能之所以安全，是因为它结合了加密和认证这两个操作。试想一下，加密之后的报文，遭到篡改之后，也很难重新计算报文摘要，因为无法轻易获取明文。
 
-
-
 #### HTTPS 的缺点
 
 -   因为需要进行加密解密等过程，因此速度会更慢；
 -   需要支付证书授权的高额费用。
 
-### 七、HTTP/2.0
+## HTTP/2.0
 
 #### HTTP/1.x 缺陷
 
@@ -561,7 +539,7 @@ HTTP/1.x 实现简单是以**牺牲性能**为代价的：
 
 HTTP/2.0 将报文分成 HEADERS 帧和 DATA 帧，它们都是二进制格式的。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/86e6a91d-a285-447a-9345-c5484b8d0c47.png)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u62zk13j30fh0c60t9.jpg" alt="img" style="zoom:67%;" />
 
 在通信过程中，只会有一个 TCP 连接存在，它承载了任意数量的双向数据流（Stream）。
 
@@ -569,15 +547,11 @@ HTTP/2.0 将报文分成 HEADERS 帧和 DATA 帧，它们都是二进制格式�
 -   消息（Message）是与逻辑请求或响应对应的完整的一系列帧。
 -   帧（Frame）是最小的通信单位，来自不同数据流的帧可以交错发送，然后再根据每个帧头的数据流标识符重新组装。
 
-
-
 #### 服务端推送
 
 HTTP/2.0 在客户端请求一个资源时，会把相关的资源一起发送给客户端，客户端就不需要再次发起请求了。例如客户端请求 page.html 页面，服务端就把 script.js 和 style.css 等与之相关的资源一起发给客户端。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/e3f1657c-80fc-4dfa-9643-bf51abd201c6.png)
-
-
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf3u640zqjj30np09h0tr.jpg" alt="img" style="zoom:67%;" />
 
 #### 首部压缩
 
@@ -587,9 +561,7 @@ HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见�
 
 不仅如此，HTTP/2.0 也使用 Huffman 编码对首部字段进行压缩。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/_u4E0B_u8F7D.png)
-
-### 八、HTTP/1.1 新特性
+## HTTP/1.1 新特性
 
 -   默认是长连接
 -   支持流水线
@@ -599,7 +571,7 @@ HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见�
 -   支持分块传输编码
 -   新增缓存处理指令 max-age
 
-###  九、HTTP 请求响应过程
+##  HTTP 请求响应过程
 
 你是不是很好奇，当你在浏览器中输入网址后，到底发生了什么事情？你想要的内容是如何展现出来的？让我们通过一个例子来探讨一下，我们假设访问的 URL 地址为 http://www.someSchool.edu/someDepartment/home.index，当我们输入网址并点击回车时，浏览器内部会进行如下操作
 
@@ -611,4 +583,3 @@ HTTP/2.0 要求客户端和服务器同时维护和更新一个包含之前见�
 -   检查完成后，HTTP 客户端会把对应的资源通过显示器呈现给用户。
 
 至此，键入网址再按下回车的全过程就结束了。上述过程描述的是一种简单的请求-响应全过程，真实的请求-响应情况可能要比上面描述的过程复杂很多。
-
