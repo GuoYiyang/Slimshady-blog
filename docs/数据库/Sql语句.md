@@ -1,730 +1,842 @@
-## Sql语句
+# SQL基础
 
-### 一、基础
+>   参考文档：https://www.w3school.com.cn/sql/index.asp
 
-模式定义了数据如何存储、存储什么样的数据以及数据如何分解等信息，数据库和表都有模式。
+## SQL简介
 
-主键的值不允许修改，也不允许复用（不能将已经删除的主键值赋给新数据行的主键）。
+**SQL 是用于访问和处理数据库的标准的计算机语言。**
 
-SQL（Structured Query Language)，标准 SQL 由 ANSI 标准委员会管理，从而称为 ANSI SQL。各个 DBMS 都有自己的实现，如 PL/SQL、Transact-SQL 等。
+#### 什么是 SQL
 
-SQL 语句不区分大小写，但是数据库表名、列名和值是否区分依赖于具体的 DBMS 以及配置。
+*   SQL 指结构化查询语言
+*   SQL 使我们有能力访问数据库
+*   SQL 是一种 ANSI 的标准计算机语言
 
-SQL 支持以下三种注释：
+注：ANSI，美国国家标准化组织
 
-```sql
-# 注释
-SELECT *
-FROM mytable; -- 注释
-/* 注释1
-   注释2 */
-```
+#### DBMS - 数据库管理系统（Database Management System）
 
-数据库创建与使用：
+数据库管理系统是一种可以访问数据库中数据的计算机程序。
 
-```sql
-CREATE DATABASE test;
-USE test;
-```
+DBMS 使我们有能力在数据库中提取、修改或者存贮信息。
 
-### 二、创建表
+不同的 DBMS 提供不同的函数供查询、提交以及修改数据。
 
-```sql
-CREATE TABLE mytable (
-  # int 类型，不为空，自增
-  id INT NOT NULL AUTO_INCREMENT,
-  # int 类型，不可为空，默认值为 1，不为空
-  col1 INT NOT NULL DEFAULT 1,
-  # 变长字符串类型，最长为 45 个字符，可以为空
-  col2 VARCHAR(45) NULL,
-  # 日期类型，可为空
-  col3 DATE NULL,
-  # 设置主键为 id
-  PRIMARY KEY (`id`));
-```
+#### RDBMS- 关系数据库管理系统（Relational Database Management System）
 
-### 三、修改表
+RDBMS 是 SQL 的基础，同样也是所有现代数据库系统的基础，比如 MS SQL Server, IBM DB2, Oracle, MySQL 以及 Microsoft Access。
 
-添加列
+RDBMS 中的数据存储在被称为表（tables）的数据库对象中。
 
-```sql
-ALTER TABLE mytable
-ADD col CHAR(20);
-```
+表是相关的数据项的集合，它由列和行组成。
 
-删除列
+#### DML 和 DDL
 
-```sql
-ALTER TABLE mytable
-DROP COLUMN col;
-```
+可以把 SQL 分为两个部分：数据操作语言 (DML) 和 数据定义语言 (DDL)。
 
-删除表
+SQL (结构化查询语言)是用于执行查询的语法。但是 SQL 语言也包含用于更新、插入和删除记录的语法。
 
-```sql
-DROP TABLE mytable;
-```
+查询和更新指令构成了 SQL 的 DML 部分：
 
-### 四、插入
+*   *SELECT* - 从数据库表中获取数据
+*   *UPDATE* - 更新数据库表中的数据
+*   *DELETE* - 从数据库表中删除数据
+*   *INSERT INTO* - 向数据库表中插入数据
 
-普通插入
+SQL 的数据定义语言 (DDL) 部分使我们有能力创建或删除表格。我们也可以定义索引（键），规定表之间的链接，以及施加表间的约束。
 
-```sql
-INSERT INTO mytable(col1, col2)
-VALUES(val1, val2);
-```
+SQL 中最重要的 DDL 语句:
 
-插入检索出来的数据
+*   *CREATE DATABASE* - 创建新数据库
+*   *ALTER DATABASE* - 修改数据库
+*   *CREATE TABLE* - 创建新表
+*   *ALTER TABLE* - 变更（改变）数据库表
+*   *DROP TABLE* - 删除表
+*   *CREATE INDEX* - 创建索引（搜索键）
+*   *DROP INDEX* - 删除索引
 
-```sql
-INSERT INTO mytable1(col1, col2)
-SELECT col1, col2
-FROM mytable2;
-```
+#### 注意事项
 
-将一个表的内容插入到一个新表
+##### 大小写问题
+
+一定要记住，SQL 对大小写不敏感！
+
+##### SQL 语句后面的分号
+
+某些数据库系统要求在每条 SQL 命令的末端使用分号。
+
+分号是在数据库系统中分隔每条 SQL 语句的标准方法，这样就可以在对服务器的相同请求中执行一条以上的语句。如果使用的是 MS Access 和 SQL Server 2000，则不必在每条 SQL 语句之后使用分号，不过某些数据库软件要求必须使用分号。
+
+## 基础语法
+
+#### SELECT
+
+SELECT 语句用于从表中选取数据。
+
+结果被存储在一个结果表中（称为结果集）。
 
 ```sql
-CREATE TABLE newtable AS
-SELECT * FROM mytable;
+SELECT 列名称 FROM 表名称
 ```
 
-### 五、更新
+以及：
 
 ```sql
-UPDATE mytable
-SET col = val
-WHERE id = 1;
+SELECT * FROM 表名称
 ```
 
-### 六、删除
+**注释：**SQL 语句对大小写不敏感。SELECT 等效于 select。
+
+#### SELECT DISTINCT
+
+在表中，可能会包含重复值。这并不成问题，不过，有时您也许希望仅仅列出不同（distinct）的值。
+
+关键词 DISTINCT 用于返回唯一不同的值。
 
 ```sql
-DELETE FROM mytable
-WHERE id = 1;
+SELECT DISTINCT 列名称 FROM 表名称
 ```
 
-**TRUNCATE TABLE** 可以清空表，也就是删除所有行。
+#### WHERE
+
+如需有条件地从表中选取数据，可将 WHERE 子句添加到 SELECT 语句。
 
 ```sql
-TRUNCATE TABLE mytable;
+SELECT 列名称 FROM 表名称 WHERE 列 运算符 值
 ```
 
-使用更新和删除操作时一定要用 WHERE 子句，不然会把整张表的数据都破坏。可以先用 SELECT 语句进行测试，防止错误删除。
+下面的运算符可在 WHERE 子句中使用：
 
-### 七、查询
-
-#### DISTINCT
-
-相同值只会出现一次。它作用于所有列，也就是说所有列的值都相同才算相同。
-
-```sql
-SELECT DISTINCT col1, col2
-FROM mytable;
-```
-
-#### LIMIT
-
-限制返回的行数。可以有两个参数，第一个参数为起始行，从 0 开始；第二个参数为返回的总行数。
-
-返回前 5 行：
-
-```sql
-SELECT *
-FROM mytable
-LIMIT 5;
-SELECT *
-FROM mytable
-LIMIT 0, 5;
-```
-
-返回第 3 ~ 5 行：
-
-```sql
-SELECT *
-FROM mytable
-LIMIT 2, 3;
-```
-
-### 八、排序
-
--   **ASC** ：升序（默认）
--   **DESC** ：降序
-
-可以按多个列进行排序，并且为每个列指定不同的排序方式：
-
-```sql
-SELECT *
-FROM mytable
-ORDER BY col1 DESC, col2 ASC;
-```
-
-### 九、过滤
-
-不进行过滤的数据非常大，导致通过网络传输了多余的数据，从而浪费了网络带宽。因此尽量使用 SQL 语句来过滤不必要的数据，而不是传输所有的数据到客户端中然后由客户端进行过滤。
-
-```sql
-SELECT *
-FROM mytable
-WHERE col IS NULL;
-```
-
-下表显示了 WHERE 子句可用的操作符
-
-| 操作符  | 说明         |
-| ------- | ------------ |
+| 操作符  | 描述         |
+| :------ | :----------- |
 | =       | 等于         |
-| <       | 小于         |
+| <>      | 不等于       |
 | >       | 大于         |
-| <> !=   | 不等于       |
-| <= !>   | 小于等于     |
-| >= !<   | 大于等于     |
-| BETWEEN | 在两个值之间 |
-| IS NULL | 为 NULL 值   |
+| <       | 小于         |
+| >=      | 大于等于     |
+| <=      | 小于等于     |
+| BETWEEN | 在某个范围内 |
+| LIKE    | 搜索某种模式 |
 
-应该注意到，**NULL 与 0、空字符串都不同**。
+**注释：**在某些版本的 SQL 中，操作符 <> 可以写为 !=。
 
-**AND 和 OR** 用于连接多个过滤条件。优先处理 AND，当一个过滤表达式涉及到多个 AND 和 OR 时，可以使用 () 来决定优先级，使得优先级关系更清晰。
+**引号的使用**
 
-**IN** 操作符用于匹配一组值，其后也可以接一个 SELECT 子句，从而匹配子查询得到的一组值。
+SQL 使用单引号来环绕*文本值*（大部分数据库系统也接受双引号）。如果是*数值*，请不要使用引号。
 
-**NOT** 操作符用于否定一个条件。
+**AND 和 OR 运算符**
 
-### 十、通配符
+AND 和 OR 运算符用于基于一个以上的条件对记录进行过滤。
 
-通配符也是用在过滤语句中，但它只能用于**文本字段**。
+AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。
 
--   **%** 匹配 >=0 个任意字符；
--   **_** 匹配 ==1 个任意字符；
--   `[]` 可以匹配集合内的字符，例如 [ab] 将匹配字符 a 或者 b。用字符 `^` 可以对其进行否定，也就是不匹配集合内的字符。
+如果第一个条件和第二个条件都成立，则 AND 运算符显示一条记录。
 
-使用 Like 来进行通配符匹配。
+如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。
+
+#### GROUP BY
+
+GROUP BY 语句用于结合合计函数，根据一个或多个列对结果集进行分组。
 
 ```sql
-SELECT *
-FROM mytable
-WHERE col LIKE '[^AB]%'; -- 不以 A 和 B 开头的任意文本
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name
 ```
 
-不要滥用通配符，通配符位于开头处匹配会非常慢。
+**GROUP BY 一个以上的列:**
 
-### 十一、计算字段
-
-在数据库服务器上完成数据的转换和格式化的工作往往比客户端上快得多，并且转换和格式化后的数据量更少的话可以减少网络通信量。
-
-计算字段通常需要使用 **AS** 来取别名，否则输出的时候字段名为计算表达式。
+我们也可以对一个以上的列应用 GROUP BY 语句，就像这样：
 
 ```sql
-SELECT col1 * col2 AS alias
-FROM mytable;
+SELECT Customer,OrderDate,SUM(OrderPrice) FROM Orders
+GROUP BY Customer,OrderDate
 ```
 
-**CONCAT()** 用于连接两个字段。许多数据库会使用空格把一个值填充为列宽，因此连接的结果会出现一些不必要的空格，使用 **TRIM()** 可以去除首尾空格。
+#### HAVING
+
+在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与合计函数一起使用。
 
 ```sql
-SELECT CONCAT(TRIM(col1), '(', TRIM(col2), ')') AS concat_col
-FROM mytable;
+SELECT column_name, aggregate_function(column_name)
+FROM table_name
+WHERE column_name operator value
+GROUP BY column_name
+HAVING aggregate_function(column_name) operator valu
 ```
 
-### 十二、函数
+#### ORDER BY
 
-各个 DBMS 的函数都是不相同的，因此不可移植，以下主要是 MySQL 的函数。
+ORDER BY 语句用于根据指定的列对结果集进行排序。
 
-#### 汇总
+ORDER BY 语句默认按照升序对记录进行排序。
 
-| 函 数   | 说 明            |
-| ------- | ---------------- |
-| AVG()   | 返回某列的平均值 |
-| COUNT() | 返回某列的行数   |
-| MAX()   | 返回某列的最大值 |
-| MIN()   | 返回某列的最小值 |
-| SUM()   | 返回某列值之和   |
+如果希望按照降序对记录进行排序，可以使用 DESC 关键字。
 
-AVG() 会忽略 NULL 行。
+**注意：**使用多列进行排序时，左边的列的排序优先级高于右侧，
 
-使用 DISTINCT 可以汇总不同的值。
+示例：
 
 ```sql
-SELECT AVG(DISTINCT col1) AS avg_col
-FROM mytable;
+SELECT exp1, exp2 FROM table1 ORDER BY exp1, exp2 DESC
 ```
 
-#### 文本处理
+先对exp1进行升序排序，若exp1相同，则按照exp2进行降序排序；若exp1没有重复，则不会对exp2排序。
 
-| 函数      | 说明           |
-| --------- | -------------- |
-| LEFT()    | 左边的字符     |
-| RIGHT()   | 右边的字符     |
-| LOWER()   | 转换为小写字符 |
-| UPPER()   | 转换为大写字符 |
-| LTRIM()   | 去除左边的空格 |
-| RTRIM()   | 去除右边的空格 |
-| LENGTH()  | 长度           |
-| SOUNDEX() | 转换为语音值   |
+#### INSERT INTO
 
-其中， **SOUNDEX()** 可以将一个字符串转换为描述其语音表示的字母数字模式。
+INSERT INTO 语句用于向表格中插入新的行。
 
 ```sql
-SELECT *
-FROM mytable
-WHERE SOUNDEX(col1) = SOUNDEX('apple')
+INSERT INTO 表名称 VALUES (值1, 值2,....)
 ```
 
-#### 日期和时间处理
-
--   日期格式：YYYY-MM-DD
--   时间格式：HH:MM:SS
-
-| 函 数         | 说 明                          |
-| ------------- | ------------------------------ |
-| ADDDATE()     | 增加一个日期（天、周等）       |
-| ADDTIME()     | 增加一个时间（时、分等）       |
-| CURDATE()     | 返回当前日期                   |
-| CURTIME()     | 返回当前时间                   |
-| DATE()        | 返回日期时间的日期部分         |
-| DATEDIFF()    | 计算两个日期之差               |
-| DATE_ADD()    | 高度灵活的日期运算函数         |
-| DATE_FORMAT() | 返回一个格式化的日期或时间串   |
-| DAY()         | 返回一个日期的天数部分         |
-| DAYOFWEEK()   | 对于一个日期，返回对应的星期几 |
-| HOUR()        | 返回一个时间的小时部分         |
-| MINUTE()      | 返回一个时间的分钟部分         |
-| MONTH()       | 返回一个日期的月份部分         |
-| NOW()         | 返回当前日期和时间             |
-| SECOND()      | 返回一个时间的秒部分           |
-| TIME()        | 返回一个日期时间的时间部分     |
-| YEAR()        | 返回一个日期的年份部分         |
+我们也可以指定所要插入数据的列：
 
 ```sql
-mysql> SELECT NOW();
-2018-4-14 20:25:11
+INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
 ```
 
-#### 数值处理
+#### UPDATE
 
-| 函数   | 说明   |
-| ------ | ------ |
-| SIN()  | 正弦   |
-| COS()  | 余弦   |
-| TAN()  | 正切   |
-| ABS()  | 绝对值 |
-| SQRT() | 平方根 |
-| MOD()  | 余数   |
-| EXP()  | 指数   |
-| PI()   | 圆周率 |
-| RAND() | 随机数 |
-
-### 十三、分组
-
-把具有相同的数据值的行放在同一组中。
-
-可以对同一分组数据使用汇总函数进行处理，例如求分组数据的平均值等。
-
-指定的分组字段除了能按该字段进行分组，也会自动按该字段进行排序。
+Update 语句用于修改表中的数据。
 
 ```sql
-SELECT col, COUNT(*) AS num
-FROM mytable
-GROUP BY col;
+UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 ```
 
-GROUP BY 自动按分组字段进行排序，ORDER BY 也可以按汇总字段来进行排序。
+#### DELETE
+
+DELETE 语句用于删除表中的行。
 
 ```sql
-SELECT col, COUNT(*) AS num
-FROM mytable
-GROUP BY col
-ORDER BY num;
+DELETE FROM 表名称 WHERE 列名称 = 值
 ```
 
-WHERE 过滤行，HAVING 过滤分组，行过滤应当先于分组过滤。
+**删除所有行**
+
+可以在不删除表的情况下删除所有的行。这意味着**表的结构、属性和索引都是完整的**：
 
 ```sql
-SELECT col, COUNT(*) AS num
-FROM mytable
-WHERE col > 2
-GROUP BY col
-HAVING num >= 2;
+DELETE FROM table_name
 ```
 
-分组规定：
-
--   GROUP BY 子句出现在 WHERE 子句之后，ORDER BY 子句之前；
--   除了汇总字段外，SELECT 语句中的每一字段都必须在 GROUP BY 子句中给出；
--   NULL 的行会单独分为一组；
--   大多数 SQL 实现不支持 GROUP BY 列具有可变长度的数据类型。
-
-### 十四、子查询
-
-子查询中只能返回一个字段的数据。
-
-可以将子查询的结果作为 WHRER 语句的过滤条件：
+或者：
 
 ```sql
-SELECT *
-FROM mytable1
-WHERE col1 IN (SELECT col2
-               FROM mytable2);
+DELETE * FROM table_name
 ```
 
-下面的语句可以检索出客户的订单数量，子查询语句会对第一个查询检索出的每个客户执行一次：
+#### CREATE DATABASE
+
+CREATE DATABASE 用于创建数据库。
 
 ```sql
-SELECT cust_name, (SELECT COUNT(*)
-                   FROM Orders
-                   WHERE Orders.cust_id = Customers.cust_id)
-                   AS orders_num
-FROM Customers
-ORDER BY cust_name;
+CREATE DATABASE database_name
 ```
 
-### 十五、连接
+#### CREATE TABLE
 
-连接用于连接多个表，使用 JOIN 关键字，并且条件语句使用 ON 而不是 WHERE。
-
-连接可以替换子查询，并且**比子查询的效率一般会更快**。
-
-可以用 AS 给列名、计算字段和表名取别名，给表名取别名是为了简化 SQL 语句以及连接相同表。
-
-#### 内连接
-
-内连接又称等值连接，使用 INNER JOIN 关键字。
+CREATE TABLE 语句用于创建数据库中的表。
 
 ```sql
-SELECT A.value, B.value
-FROM tablea AS A INNER JOIN tableb AS B
-ON A.key = B.key;
+CREATE TABLE 表名称
+(
+列名称1 数据类型,
+列名称2 数据类型,
+列名称3 数据类型,
+....
+)
 ```
 
-可以不明确使用 INNER JOIN，而使用普通查询并在 WHERE 中将两个表中要连接的列用等值方法连接起来。
+数据类型（data_type）规定了列可容纳何种数据类型。下面的表格包含了SQL中最常用的数据类型：
+
+| 数据类型                                                     | 描述                                                         |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| integer(size) <br/>int(size) <br/>smallint(size)<br/>tinyint(size) | 仅容纳整数。在括号内规定数字的最大位数。                     |
+| decimal(size,d)<br/>numeric(size,d)                          | 容纳带有小数的数字。"size" 规定数字的最大位数。"d" 规定小数点右侧的最大位数。 |
+| char(size)                                                   | 容纳固定长度的字符串（可容纳字母、数字以及特殊字符）。在括号中规定字符串的长度。 |
+| varchar(size)                                                | 容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。在括号中规定字符串的最大长度。 |
+| date(yyyymmdd)                                               | 容纳日期。                                                   |
+
+#### ALTER TABLE 
+
+ALTER TABLE 语句用于在已有的表中添加、修改或删除列。
+
+如需在表中添加列，请使用下列语法:
 
 ```sql
-SELECT A.value, B.value
-FROM tablea AS A, tableb AS B
-WHERE A.key = B.key;
+ALTER TABLE table_name
+ADD column_name datatype
 ```
 
-#### 自连接
-
-自连接可以看成内连接的一种，只是连接的表是自身而已。
-
-一张员工表，包含员工姓名和员工所属部门，要找出与 Jim 处在同一部门的所有员工姓名。
-
-子查询版本
+要删除表中的列，请使用下列语法：
 
 ```sql
-SELECT name
-FROM employee
-WHERE department = (
-      SELECT department
-      FROM employee
-      WHERE name = "Jim");
+ALTER TABLE table_name 
+DROP COLUMN column_name
 ```
 
-自连接版本
+**注释：**某些数据库系统不允许这种在数据库表中删除列的方式 (DROP COLUMN column_name)。
+
+要改变表中列的数据类型，请使用下列语法：
 
 ```sql
-SELECT e1.name
-FROM employee AS e1 INNER JOIN employee AS e2
-ON e1.department = e2.department
-      AND e2.name = "Jim";
+ALTER TABLE table_name
+ALTER COLUMN column_name datatype
 ```
 
-#### 自然连接
+#### CREATE INDEX
 
-自然连接是把同名列通过等值测试连接起来的，同名列可以有多个。
+**CREATE INDEX 语句用于在表中创建索引。**
 
-内连接和自然连接的区别：内连接提供连接的列，而自然连接自动连接所有同名列。
+**在不读取整个表的情况下，索引使数据库应用程序可以更快地查找数据。**
+
+您可以在表中创建索引，以便更加快速高效地查询数据。
+
+用户无法看到索引，它们只能被用来加速搜索/查询。
+
+**注释：**更新一个包含索引的表需要比更新一个没有索引的表更多的时间，这是由于索引本身也需要更新。因此，理想的做法是**仅仅在常常被搜索的列（以及表）上面创建索引**。
+
+**CREATE INDEX 语法:**
+
+在表上创建一个简单的索引。允许使用重复的值：
 
 ```sql
-SELECT A.value, B.value
-FROM tablea AS A NATURAL JOIN tableb AS B;
+CREATE INDEX index_name
+ON table_name (column_name [DESC])
 ```
 
-#### 外连接
+**注释：**"column_name" 规定需要索引的列。
 
-外连接保留了没有关联的那些行。分为**左外连接**，**右外连接**以及**全外连接**，左外连接就是保留左表没有关联的行。
+**SQL CREATE UNIQUE INDEX 语法:**
 
-检索所有顾客的订单信息，包括还没有订单信息的顾客。
+在表上创建一个唯一的索引。**唯一的索引意味着两个行不能拥有相同的索引值**。
 
 ```sql
-SELECT Customers.cust_id, Orders.order_num
-FROM Customers LEFT OUTER JOIN Orders
-ON Customers.cust_id = Orders.cust_id;
+CREATE UNIQUE INDEX index_name
+ON table_name (column_name)
 ```
 
-customers 表：
+#### CREATE VIEW
 
-| cust_id | cust_name |
-| ------- | --------- |
-| 1       | a         |
-| 2       | b         |
-| 3       | c         |
+什么是视图？
 
-orders 表：
+在 SQL 中，视图是基于 SQL 语句的结果集的可视化的表。
 
-| order_id | cust_id |
-| -------- | ------- |
-| 1        | 1       |
-| 2        | 1       |
-| 3        | 3       |
-| 4        | 3       |
+视图包含行和列，就像一个真实的表。视图中的字段就是来自一个或多个数据库中的真实的表中的字段。我们可以向视图添加 SQL 函数、WHERE 以及 JOIN 语句，我们也可以提交数据，就像这些来自于某个单一的表。
 
-结果：
+**注释：**数据库的设计和结构不会受到视图中的函数、where 或 join 语句的影响。
 
-| cust_id | cust_name | order_id |
-| ------- | --------- | -------- |
-| 1       | a         | 1        |
-| 1       | a         | 2        |
-| 3       | c         | 3        |
-| 3       | c         | 4        |
-| 2       | b         | Null     |
-
-### 十六、组合查询
-
-使用 **UNION** 来组合两个查询，如果第一个查询返回 M 行，第二个查询返回 N 行，那么组合查询的结果一般为 M+N 行。
-
-每个查询必须包含相同的列、表达式和聚集函数。
-
-默认会去除相同行，如果需要保留相同行，使用 UNION ALL。
-
-只能包含一个 ORDER BY 子句，并且必须位于语句的最后。
+SQL CREATE VIEW 语法:
 
 ```sql
-SELECT col
-FROM mytable
-WHERE col = 1
+CREATE VIEW view_name AS
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+```
+
+**注释：**视图总是显示最近的数据。每当用户查询视图时，数据库引擎通过使用 SQL 语句来重建数据。
+
+
+
+## 操作符
+
+#### TOP (LIMIT)
+
+TOP 子句用于规定要返回的记录的数目。
+
+对于拥有数千条记录的大型表来说，TOP 子句是非常有用的。
+
+**注释：**并非所有的数据库系统都支持 TOP 子句。
+
+MySQL 语法：
+
+```sql
+SELECT column_name(s)
+FROM table_name
+LIMIT numbe
+```
+
+#### LIKE 
+
+LIKE 操作符用于在 WHERE 子句中搜索列中的指定模式。
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE column_name LIKE pattern
+```
+
+**通配符:**
+
+在搜索数据库中的数据时，SQL 通配符可以替代一个或多个字符。
+
+SQL 通配符必须与 LIKE 运算符一起使用。
+
+在 SQL 中，可使用以下通配符：
+
+| 通配符                     | 描述                       |
+| :------------------------- | :------------------------- |
+| %                          | 替代一个或多个字符         |
+| _                          | 仅替代一个字符             |
+| [charlist]                 | 字符列中的任何单一字符     |
+| [^charlist]或者[!charlist] | 不在字符列中的任何单一字符 |
+
+#### IN 
+
+IN 操作符允许我们在 WHERE 子句中规定多个值。
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE column_name IN (value1,value2,...)
+```
+
+#### BETWEEN 
+
+操作符 BETWEEN ... AND 会选取介于两个值之间的数据范围。这些值可以是数值、文本或者日期。
+
+```sql
+SELECT column_name(s)
+FROM table_name
+WHERE column_name
+BETWEEN value1 AND value2
+```
+
+**重要事项：**不同的数据库对 BETWEEN...AND 操作符的处理方式是有差异的。所以，请检查你的数据库是如何处理 BETWEEN....AND 操作符的！
+
+#### SQL Alias
+
+**通过使用 SQL，可以为列名称和表名称指定别名（Alias）。**
+
+表的 SQL Alias 语法
+
+```sql
+SELECT column_name(s)
+FROM table_name
+AS alias_name
+```
+
+列的 SQL Alias 语法
+
+```sql
+SELECT column_name 
+AS alias_name
+FROM table_name
+```
+
+#### JOIN
+
+**SQL join 用于根据两个或多个表中的列之间的关系，从这些表中查询数据。**
+
+**Join 和 Key**
+
+有时为了得到完整的结果，我们需要从两个或更多的表中获取结果。我们就需要执行 join。
+
+数据库中的表可通过键将彼此联系起来。主键（Primary Key）是一个列，在这个列中的每一行的值都是唯一的。在表中，每个主键的值都是唯一的。这样做的目的是在不重复每个表中的所有数据的情况下，把表间的数据交叉捆绑在一起。
+
+我们可以通过引用两个表的方式，从两个表中获取数据，我们也可以使用关键词 JOIN 来从两个表中获取数据。
+
+**不同的 SQL JOIN**
+
+*   JOIN: 如果表中有至少一个匹配，则返回行
+*   LEFT JOIN: 即使右表中没有匹配，也从左表返回所有的行
+*   RIGHT JOIN: 即使左表中没有匹配，也从右表返回所有的行
+*   FULL JOIN: 只要其中一个表中存在匹配，就返回行
+
+##### INNER JOIN 
+
+在表中存在至少一个匹配时，INNER JOIN 关键字返回行。
+
+```sql
+SELECT column_name(s)
+FROM table_name1
+INNER JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+```
+
+**注释：**INNER JOIN 与 JOIN 是相同的。
+
+##### LEFT JOIN 
+
+LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。
+
+```sql
+SELECT column_name(s)
+FROM table_name1
+LEFT JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+```
+
+**注释：**在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
+
+##### RIGHT JOIN
+
+RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。
+
+```sql
+SELECT column_name(s)
+FROM table_name1
+RIGHT JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+```
+
+**注释：**在某些数据库中， RIGHT JOIN 称为 RIGHT OUTER JOIN。
+
+##### FULL JOIN
+
+只要其中某个表存在匹配，FULL JOIN 关键字就会返回行。
+
+```sql
+SELECT column_name(s)
+FROM table_name1
+FULL JOIN table_name2 
+ON table_name1.column_name=table_name2.column_name
+```
+
+**注释：**在某些数据库中， FULL JOIN 称为 FULL OUTER JOIN。
+
+#### UNION
+
+UNION 操作符用于合并两个或多个 SELECT 语句的结果集。
+
+请注意，**UNION 内部的 SELECT 语句必须拥有相同数量的列，也必须拥有相似的数据类型，同时每条 SELECT 语句中的列的顺序必须相同**。
+
+SQL UNION 语法:
+
+```sql
+SELECT column_name(s) FROM table_name1
 UNION
-SELECT col
-FROM mytable
-WHERE col =2;
+SELECT column_name(s) FROM table_name2
 ```
 
-### 十七、视图
+**注释：**默认地，UNION 操作符选取不同的值。如果允许重复的值，请使用 UNION ALL。
 
-视图是虚拟的表，本身不包含数据，也就不能对其进行索引操作。
-
-对视图的操作和对普通表的操作一样。
-
-视图具有如下好处：
-
--   简化复杂的 SQL 操作，比如复杂的连接；
--   只使用实际表的一部分数据；
--   通过只给用户访问视图的权限，保证数据的安全性；
--   更改数据格式和表示。
+SQL UNION ALL 语法:
 
 ```sql
-CREATE VIEW myview AS
-SELECT Concat(col1, col2) AS concat_col, col3*col4 AS compute_col
-FROM mytable
-WHERE col5 = val;
+SELECT column_name(s) FROM table_name1
+UNION ALL
+SELECT column_name(s) FROM table_name2
 ```
 
-### 十八、存储过程
+另外，**UNION 结果集中的列名总是等于 UNION 中第一个 SELECT 语句中的列名**。
 
-存储过程可以看成是对一系列 SQL 操作的批处理。
+#### SELECT INTO
 
-使用存储过程的好处：
+SELECT INTO 语句从一个表中选取数据，然后把数据插入另一个表中。
 
--   代码封装，保证了一定的安全性；
--   代码复用；
--   由于是预先编译，因此具有很高的性能。
+SELECT INTO 语句常用于创建表的备份复件或者用于对记录进行存档。
 
-命令行中创建存储过程需要自定义分隔符，因为命令行是以 ; 为结束符，而存储过程中也包含了分号，因此会错误把这部分分号当成是结束符，造成语法错误。
-
-包含 in、out 和 inout 三种参数。
-
-给变量赋值都需要用 select into 语句。
-
-每次只能给一个变量赋值，不支持集合的操作。
-
-```sql
-delimiter //
-
-create procedure myprocedure( out ret int )
-    begin
-        declare y int;
-        select sum(col1)
-        from mytable
-        into y;
-        select y*y into ret;
-    end //
-
-delimiter ;
-call myprocedure(@ret);
-select @ret;
-```
-
-### 十九、游标
-
-在存储过程中使用游标可以对一个结果集进行移动遍历。
-
-游标主要用于交互式应用，其中用户需要对数据集中的任意行进行浏览和修改。
-
-使用游标的四个步骤：
-
-1.  声明游标，这个过程没有实际检索出数据；
-2.  打开游标；
-3.  取出数据；
-4.  关闭游标；
-
-```sql
-delimiter //
-create procedure myprocedure(out ret int)
-    begin
-        declare done boolean default 0;
-
-        declare mycursor cursor for
-        select col1 from mytable;
-        # 定义了一个 continue handler，当 sqlstate '02000' 这个条件出现时，会执行 set done = 1
-        declare continue handler for sqlstate '02000' set done = 1;
-
-        open mycursor;
-
-        repeat
-            fetch mycursor into ret;
-            select ret;
-        until done end repeat;
-
-        close mycursor;
-    end //
- delimiter ;
-```
-
-### 二十、触发器
-
-触发器会在某个表执行以下语句时而自动执行：DELETE、INSERT、UPDATE。
-
-触发器必须指定在语句执行之前还是之后自动执行，之前执行使用 BEFORE 关键字，之后执行使用 AFTER 关键字。BEFORE 用于数据验证和净化，AFTER 用于审计跟踪，将修改记录到另外一张表中。
-
-INSERT 触发器包含一个名为 NEW 的虚拟表。
-
-```sql
-CREATE TRIGGER mytrigger AFTER INSERT ON mytable
-FOR EACH ROW SELECT NEW.col into @result;
-
-SELECT @result; -- 获取结果
-```
-
-DELETE 触发器包含一个名为 OLD 的虚拟表，并且是只读的。
-
-UPDATE 触发器包含一个名为 NEW 和一个名为 OLD 的虚拟表，其中 NEW 是可以被修改的，而 OLD 是只读的。
-
-MySQL 不允许在触发器中使用 CALL 语句，也就是不能调用存储过程。
-
-### 二十一、事务管理
-
-基本术语：
-
--   事务（transaction）指一组 SQL 语句；
--   回退（rollback）指撤销指定 SQL 语句的过程；
--   提交（commit）指将未存储的 SQL 语句结果写入数据库表；
--   保留点（savepoint）指事务处理中设置的临时占位符（placeholder），你可以对它发布回退（与回退整个事务处理不同）。
-
-不能回退 SELECT 语句，回退 SELECT 语句也没意义；也不能回退 CREATE 和 DROP 语句。
-
-MySQL 的事务提交默认是隐式提交，每执行一条语句就把这条语句当成一个事务然后进行提交。当出现 START TRANSACTION 语句时，会关闭隐式提交；当 COMMIT 或 ROLLBACK 语句执行后，事务会自动关闭，重新恢复隐式提交。
-
-设置 autocommit 为 0 可以取消自动提交；autocommit 标记是针对每个连接而不是针对服务器的。
-
-如果没有设置保留点，ROLLBACK 会回退到 START TRANSACTION 语句处；如果设置了保留点，并且在 ROLLBACK 中指定该保留点，则会回退到该保留点。
-
-```sql
-START TRANSACTION
-// ...
-SAVEPOINT delete1
-// ...
-ROLLBACK TO delete1
-// ...
-COMMIT
-```
-
-### 二十二、字符集
-
-基本术语：
-
--   字符集为字母和符号的集合；
--   编码为某个字符集成员的内部表示；
--   校对字符指定如何比较，主要用于排序和分组。
-
-除了给表指定字符集和校对外，也可以给列指定：
-
-```sql
-CREATE TABLE mytable
-(col VARCHAR(10) CHARACTER SET latin COLLATE latin1_general_ci )
-DEFAULT CHARACTER SET hebrew COLLATE hebrew_general_ci;
-```
-
-可以在排序、分组时指定校对：
+您可以把所有的列插入新表：
 
 ```sql
 SELECT *
-FROM mytable
-ORDER BY col COLLATE latin1_general_ci;
+INTO new_table_name [IN externaldatabase] 
+FROM old_tablename
 ```
 
-### 二十三、权限管理
-
-MySQL 的账户信息保存在 mysql 这个数据库中。
+或者只把希望的列插入新表：
 
 ```sql
-USE mysql;
-SELECT user FROM user;
+SELECT column_name(s)
+INTO new_table_name [IN externaldatabase] 
+FROM old_tablename
 ```
 
-**创建账户**
+#### SQL DROP
 
-新创建的账户没有任何权限。
+**通过使用 DROP 语句，可以轻松地删除索引、表和数据库。**
+
+**SQL DROP INDEX 语句:**
+
+我们可以使用 DROP INDEX 命令删除表格中的索引。
+
+用于 MySQL 的语法:
 
 ```sql
-CREATE USER myuser IDENTIFIED BY 'mypassword';
+ALTER TABLE table_name DROP INDEX index_name
 ```
 
-**修改账户名**
+**SQL DROP DATABASE 语句:**
+
+DROP DATABASE 语句用于删除数据库：
 
 ```sql
-RENAME USER myuser TO newuser;
+DROP DATABASE 数据库名称
 ```
 
-**删除账户**
+#### TRUNCATE
+
+如果我们仅仅需要除去表内的数据，但并不删除表本身，那么我们该如何做呢？
+
+请使用 TRUNCATE TABLE 命令（仅仅删除表格中的数据）：
 
 ```sql
-DROP USER myuser;
+TRUNCATE TABLE 表名称
 ```
 
-**查看权限**
+#### NULL
+
+如果表中的某个列是可选的，那么我们可以在不向该列添加值的情况下插入新记录或更新已有的记录。这意味着该字段将以 NULL 值保存。
+
+NULL 值的处理方式与其他值不同。
+
+NULL 用作未知的或不适用的值的占位符。
+
+**注释：**无法比较 NULL 和 0；**它们是不等价的**。
+
+那么我们如何测试 NULL 值呢？
+
+无法使用比较运算符来测试 NULL 值，比如 =, <, 或者 <>。
+
+我们必须使用 IS NULL 和 IS NOT NULL 操作符。
+
+## 约束 (Constraints)
+
+#### 约束简介
+
+约束用于限制加入表的数据的类型。
+
+可以在创建表时规定约束（通过 CREATE TABLE 语句），或者在表创建之后也可以（通过 ALTER TABLE 语句）。
+
+#### NOT NULL
+
+NOT NULL 约束强制列不接受 NULL 值。
+
+NOT NULL 约束强制字段始终包含值。这意味着，如果不向字段添加值，就无法插入新记录或者更新记录。
+
+#### UNIQUE
+
+UNIQUE 约束唯一标识数据库表中的每条记录。
+
+UNIQUE 和 PRIMARY KEY 约束均为列或列集合提供了唯一性的保证。
+
+PRIMARY KEY 拥有自动定义的 UNIQUE 约束。
+
+请注意，**每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束**。
+
+#### PRIMARY KEY
+
+PRIMARY KEY 约束唯一标识数据库表中的每条记录。
+
+主键必须包含唯一的值。
+
+主键列不能包含 NULL 值。
+
+每个表都应该有一个主键，并且每个表只能有一个主键。
+
+#### FOREIGN KEY
+
+一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
+
+FOREIGN KEY 约束用于预防破坏表之间连接的动作。
+
+FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。
+
+#### CHECK
+
+CHECK 约束用于限制列中的值的范围。
+
+如果对单个列定义 CHECK 约束，那么该列只允许特定的值。
+
+如果对一个表定义 CHECK 约束，那么此约束会在特定的列中对值进行限制。
+
+#### DEFAULT
+
+DEFAULT 约束用于向列中插入默认值。
+
+如果没有规定其他的值，那么会将默认值添加到所有的新记录。
+
+#### AUTO INCREMENT
+
+**Auto-increment 会在新记录插入表中时生成一个唯一的数字。**
+
+我们通常希望在每次插入新记录时，自动地创建主键字段的值。
+
+我们可以在表中创建一个 auto-increment 字段。
+
+## 函数
+
+#### 函数简介
+
+内建 SQL 函数的语法是：
 
 ```sql
-SHOW GRANTS FOR myuser;
+SELECT function(列) FROM 表
 ```
 
-**授予权限**
+在 SQL 中，基本的函数类型和种类有若干种。函数的基本类型是：
 
-账户用 username@host 的形式定义，username@% 使用的是默认主机名。
+*   Aggregate 函数
+
+    Aggregate 函数的操作面向一系列的值，并返回一个单一的值。
+
+    **注释：**如果在 SELECT 语句的项目列表中的众多其它表达式中使用 SELECT 语句，则这个 SELECT 必须使用 GROUP BY 语句
+
+*   Scalar 函数
+
+    Scalar 函数的操作面向某个单一的值，并返回基于输入值的一个单一的值。
+
+#### AVG
+
+AVG 函数返回数值列的平均值。NULL 值不包括在计算中。
 
 ```sql
-GRANT SELECT, INSERT ON mydatabase.* TO myuser;
+SELECT AVG(column_name) FROM table_name
 ```
 
-**删除权限**
+#### COUNT
 
-GRANT 和 REVOKE 可在几个层次上控制访问权限：
+**SQL COUNT(column_name) 语法:**
 
--   整个服务器，使用 GRANT ALL 和 REVOKE ALL；
--   整个数据库，使用 ON database.*；
--   特定的表，使用 ON database.table；
--   特定的列；
--   特定的存储过程。
+COUNT(column_name) 函数返回指定列的值的数目（NULL 不计入）：
 
 ```sql
-REVOKE SELECT, INSERT ON mydatabase.* FROM myuser;
+SELECT COUNT(column_name) FROM table_name
 ```
 
-**更改密码**
+**SQL COUNT(*) 语法:**
 
-必须使用 Password() 函数进行加密。
+COUNT(*) 函数返回表中的记录数：
 
 ```sql
-SET PASSWROD FOR myuser = Password('new_password');
+SELECT COUNT(*) FROM table_name
 ```
 
+**SQL COUNT(DISTINCT column_name) 语法:**
+
+COUNT(DISTINCT column_name) 函数返回指定列的不同值的数目：
+
+```sql
+SELECT COUNT(DISTINCT column_name) FROM table_name
+```
+
+**注释：**COUNT(DISTINCT) 适用于 ORACLE 和 Microsoft SQL Server，但是无法用于 Microsoft Access。
+
+#### FIRST
+
+FIRST() 函数返回指定的字段中第一个记录的值。
+
+**提示：**可使用 ORDER BY 语句对记录进行排序。
+
+```sql
+SELECT FIRST(column_name) FROM table_name
+```
+
+#### LAST
+
+LAST() 函数返回指定的字段中最后一个记录的值。
+
+**提示：**可使用 ORDER BY 语句对记录进行排序。
+
+```sql
+SELECT LAST(column_name) FROM table_name
+```
+
+#### MAX
+
+MAX 函数返回一列中的最大值。NULL 值不包括在计算中。
+
+```sql
+SELECT MAX(column_name) FROM table_name
+```
+
+**注释：**MIN 和 MAX 也可用于文本列，以获得按字母顺序排列的最高或最低值。
+
+#### MIN
+
+MIN 函数返回一列中的最小值。NULL 值不包括在计算中。
+
+```sql
+SELECT MIN(column_name) FROM table_name
+```
+
+**注释：**MIN 和 MAX 也可用于文本列，以获得按字母顺序排列的最高或最低值。
+
+#### SUM
+
+SUM 函数返回数值列的总数（总额）。
+
+```sql
+SELECT SUM(column_name) FROM table_name
+```
+
+**合计函数 (比如 SUM) 常常需要添加 GROUP BY 语句。**
+
+#### UCASE
+
+UCASE 函数把字段的值转换为大写。
+
+```sql
+SELECT UCASE(column_name) FROM table_name
+```
+
+#### LCASE
+
+LCASE 函数把字段的值转换为小写。
+
+```sql
+SELECT LCASE(column_name) FROM table_name
+```
+
+#### MID
+
+MID 函数用于从文本字段中提取字符。
+
+```sql
+SELECT MID(column_name,start[,length]) FROM table_names
+```
+
+| 参数        | 描述                                                        |
+| :---------- | :---------------------------------------------------------- |
+| column_name | 必需。要提取字符的字段。                                    |
+| start       | 必需。规定开始位置（起始值是 1）。                          |
+| length      | 可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。 |
+
+#### LEN
+
+LEN 函数返回文本字段中值的长度。
+
+```sql
+SELECT LEN(column_name) FROM table_name
+```
+
+#### ROUND
+
+ROUND 函数用于把数值字段舍入为指定的小数位数。
+
+```sql
+SELECT ROUND(column_name,decimals) FROM table_name
+```
+
+| 参数        | 描述                         |
+| :---------- | :--------------------------- |
+| column_name | 必需。要舍入的字段。         |
+| decimals    | 必需。规定要返回的小数位数。 |
+
+#### NOW
+
+NOW 函数返回当前的日期和时间。
+
+**提示：**如果您在使用 Sql Server 数据库，请使用 getdate() 函数来获得当前的日期时间。
+
+```sql
+SELECT NOW() FROM table_name
+```
+
+#### FORMAT
+
+FORMAT 函数用于对字段的显示进行格式化。
+
+```sql
+SELECT FORMAT(column_name,format) FROM table_name
+```
+
+| 参数        | 描述                   |
+| :---------- | :--------------------- |
+| column_name | 必需。要格式化的字段。 |
+| format      | 必需。规定格式。       |
