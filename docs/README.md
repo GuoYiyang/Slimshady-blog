@@ -32,9 +32,9 @@
 
 [MySQL](数据库\MySQL.md) 
 
-[Redis与缓存](数据库\Redis与缓存.md) 
+[SQL基础](数据库\SQL基础.md) 
 
-[Sql语句](数据库\Sql语句.md) 
+[Redis与缓存](数据库\Redis与缓存.md) 
 
 ------
 
