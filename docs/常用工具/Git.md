@@ -126,7 +126,7 @@ git checkout master
 合并分支(可能会有冲突)
 
 ```shell
- git merge test
+git merge test
 ```
 
 把新建的分支删掉
