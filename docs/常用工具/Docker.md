@@ -1,5 +1,7 @@
 # Docker
 
+>   参考文档：https://snailclimb.gitee.io/javaguide/#/docs/tools/Docker-Image
+
 ## Docker 下载镜像
 
 如果我们想要在本地运行容器，就必须保证本地存在对应的镜像。所以，第一步，我们需要下载镜像。当我们尝试下载镜像时，Docker 会尝试先从默认的镜像仓库（默认使用 Docker Hub 公共仓库）去下载，当然了，用户也可以自定义配置想要下载的镜像仓库。
