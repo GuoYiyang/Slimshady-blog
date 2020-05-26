@@ -840,3 +840,4 @@ SELECT FORMAT(column_name,format) FROM table_name
 | :---------- | :--------------------- |
 | column_name | 必需。要格式化的字段。 |
 | format      | 必需。规定格式。       |
+
