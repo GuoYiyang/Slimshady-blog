@@ -298,7 +298,7 @@ FutureTask 表示一个异步运算的任务。FutureTask 里面可以传入一�
 
 #### 五种基本状态
 
-![线程状态转化](https://tva1.sinaimg.cn/large/007S8ZIlly1gf004fi0gej30oc0domy4.jpg)
+![线程状态转化](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5trqjcndj30oc0do0v2.jpg)
 
 1.  **新建(new)：**新创建了一个线程对象。
 
@@ -650,7 +650,7 @@ synchronized是Java中的一个关键字，在使用的过程中并没有看到�
 
 通过JDK 反汇编指令 javap -c -v SynchronizedDemo
 
-![synchronized关键字原理](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAxOS8xMS8yNS8xNmVhMDQ3NGY5ODYyMzE5?x-oss-process=image/format,png)
+![synchronized关键字原理](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5trqwxexj30ph0hlaad.jpg)
 
 可以看出在执行同步代码块之前之后都有一个monitor字样，其中前面的是monitorenter，后面的是离开monitorexit，不难想象一个线程也执行同步代码块，首先要获取锁，而获取锁的过程就是monitorenter ，在执行完代码块之后，要释放锁，释放锁就是执行monitorexit指令。
 
@@ -852,7 +852,7 @@ AQS核心思想是，如果被请求的共享资源空闲，则将当前请求�
 >   CLH(Craig,Landin,and Hagersten)队列是一个虚拟的双向队列（虚拟的双向队列即不存在队列实例，仅存在结点之间的关联关系）。AQS是将每条请求共享资源的线程封装成一个CLH锁队列的一个结点（Node）来实现锁的分配。
 >
 
-![AQS原理图](https://imgconvert.csdnimg.cn/aHR0cHM6Ly91c2VyLWdvbGQtY2RuLnhpdHUuaW8vMjAxOS8xMS8yNS8xNmVhMDQ3Njc4NGNkMzJi?x-oss-process=image/format,png)
+![AQS原理图](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5trrdnc1j30no0b5aad.jpg)
 
 AQS使用一个int成员变量来表示同步状态，通过内置的FIFO队列来完成获取资源线程的排队工作。AQS使用CAS对该同步状态进行原子操作实现对其值的修改。
 

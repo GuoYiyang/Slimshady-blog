@@ -101,7 +101,7 @@
 
 私有构造函数保证了不能通过构造函数来创建对象实例，只能通过公有静态函数返回唯一的私有静态变量。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/eca1f422-8381-409b-ad04-98ef39ae38ba.png)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5tri9r9hj30cd0873ym.jpg)
 
 ##### Implementation
 

@@ -1301,7 +1301,7 @@ Throwable 可以用来表示任何可以作为异常抛出的类，分为两种�
 -   **受检异常** ：需要用 try...catch... 语句捕获并进行处理，并且可以从异常中恢复；
 -   **非受检异常** ：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/PPjwP.png)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5trjerdkj31i30u012j.jpg)
 
 ### 泛型
 

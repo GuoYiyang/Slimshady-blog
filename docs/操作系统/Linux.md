@@ -161,7 +161,7 @@ Linux中的打包文件一般是以.tar结尾的，压缩的命令一般是以.g
 
 示例：在随意某个目录下`ls -l`
 
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf4hog6ly7j30gd06cwen.jpg)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5tzujt2nj30gd06ct9u.jpg)
 
 第一列的内容的信息解释如下：
 
@@ -221,7 +221,7 @@ Linux中的打包文件一般是以.tar结尾的，压缩的命令一般是以.g
 
 **`chmod -R u=rwx,g=rwx,o=rwx ./log`** 	// 递归给log目录下的所有文件授权
 
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf4hoh3re1j30el06u0ss.jpg)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5tzvbeb2j30el06u0tf.jpg)
 
 上述示例还可以使用数字表示：
 
