@@ -486,7 +486,7 @@ CDN 主要有以下优点：
 -   通过部署多台服务器，从而提高系统整体的带宽性能；
 -   多台服务器可以看成是一种冗余机制，从而具有高可用性。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/15313ed8-a520-4799-a300-2b6b36be314f.jpg)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf6pgd7wvhj30k20960td.jpg)
 
 ## 缓存异常
 
@@ -629,11 +629,11 @@ Distributed Hash Table（DHT） 是一种哈希分布方式，其目的是为了
 
 将哈希空间 [0, 2^n^-1] 看成一个哈希环，每个服务器节点都配置到哈希环上。每个数据对象通过哈希取模得到哈希值之后，存放到哈希环中顺时针方向第一个大于等于该哈希值的节点上。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/68b110b9-76c6-4ee2-b541-4145e65adb3e.jpg)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf6pgeci4vj30fa0fd0te.jpg)
 
 一致性哈希在增加或者删除节点时只会影响到哈希环中相邻的节点，例如下图中新增节点 X，只需要将它前一个节点 C 上的数据重新进行分布即可，对于节点 A、B、D 都没有影响。
 
-![img](https://cs-notes-1256109796.cos.ap-guangzhou.myqcloud.com/66402828-fb2b-418f-83f6-82153491bcfe.jpg)
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf6pgf7o3rj30f60fo0ti.jpg)
 
 
 
