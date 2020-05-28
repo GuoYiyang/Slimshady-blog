@@ -1,5 +1,11 @@
 # JavaStream
 
+>   参考文档：
+>
+>   [Java8-Stream API 详解](https://blog.csdn.net/ycj_xiyang/article/details/83624642)
+>
+>   [java8 stream常用方法](https://blog.csdn.net/zxl646801924/article/details/90374320?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase)
+
 ## 简介
 
 Stream 作为 Java 8 的一大亮点，它与 java.io 包里的 InputStream 和 OutputStream 是完全不同的概念。
