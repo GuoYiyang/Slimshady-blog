@@ -10,6 +10,8 @@
 
 [Java异常](Java/Java异常.md)
 
+[JavaStream](Java/JavaStream.md) 
+
 [Java设计模式](Java/Java设计模式.md)
 
 ---
