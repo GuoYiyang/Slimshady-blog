@@ -1,6 +1,6 @@
 # SQL基础
 
->   参考文档：[https://www.w3school.com.cn/sql/index.asp](https://www.w3school.com.cn/sql/index.asp)
+>   参考文档: [SQL 教程](https://www.w3school.com.cn/sql/index.asp)
 
 ## SQL简介
 
