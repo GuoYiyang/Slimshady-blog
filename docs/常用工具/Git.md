@@ -1,143 +1,139 @@
 # Git
 
->   参考文档：https://snailclimb.gitee.io/javaguide/#/docs/tools/Git
+>   参考文档：
+>
+>   [Git](https://cyc2018.github.io/CS-Notes/#/notes/Git)
+>
+>   [Git教程](https://www.liaoxuefeng.com/wiki/896043488029600)
 
-## 三种状态
+## Git与Svn的区别
 
-Git 有三种状态，你的文件可能处于其中之一：
+Git 属于分布式版本控制系统，而 SVN 属于集中式。
 
-1.  **已提交（committed）**：数据已经安全的保存在本地数据库中。
-2.  **已修改（modified）**：已修改表示修改了文件，但还没保存到数据库中。
-3.  **已暂存（staged）**：表示对一个已修改文件的当前版本做了标记，使之包含在下次提交的快照中。
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0q07re2j30tt0grq4a.jpg" alt="img" style="zoom:50%;" />
 
-由此引入 Git 项目的三个工作区域的概念：**Git 仓库(.git directoty)**、**工作目录(Working Directory)** 以及 **暂存区域(Staging Area)** 。
+*   集中式版本控制只有中心服务器拥有一份代码，而分布式版本控制每个人的电脑上就有一份完整的代码。
+*   集中式版本控制有安全性问题，当中心服务器挂了所有人都没办法工作了。
+*   集中式版本控制需要连网才能工作，如果网速过慢，那么提交一个文件会非常慢。而分布式版本控制不需要连网就能工作。
+*   分布式版本控制新建分支、合并分支操作速度非常快，而集中式版本控制新建一个分支相当于复制一份完整代码。
 
-<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gf4qcxem9oj30m80c90sy.jpg" alt="img" style="zoom:67%;" />
+## 中心服务器
 
-**基本的 Git 工作流程如下：**
+中心服务器用来交换每个用户的修改，没有中心服务器也能工作，但是中心服务器能够 24 小时保持开机状态，这样就能更方便的交换修改。
 
-1.  在工作目录中修改文件。
-2.  暂存文件，将文件的快照放入暂存区域。
-3.  提交更新，找到暂存区域的文件，将快照永久性存储到 Git 仓库目录。
+>   Github 就是一个中心服务器。
 
-## 快速入门
+## 工作流
 
-### 获取 Git 仓库
+新建一个仓库之后，当前目录就成为了工作区，工作区下有一个隐藏目录 `.git`，它属于 Git 的版本库。
 
-有两种取得 Git 项目仓库的方法。
+Git 的版本库有一个称为 `Stage` 的暂存区以及最后的 `History` 版本库，`History` 存储所有分支信息，使用一个 `HEAD` 指针指向当前分支。
 
-1.  在现有目录中初始化仓库: 进入项目目录运行 `git init` 命令,该命令将创建一个名为 `.git` 的子目录。
-2.  从一个服务器克隆一个现有的 Git 仓库: `git clone [url]` 自定义本地仓库的名字: `git clone [url]` directoryname
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0rc9y5gj30xi0i2gn2.jpg" alt="img" style="zoom:50%;" />
 
-### 记录每次更新到仓库
 
-1.  **检测当前文件状态** : `git status`
-2.  **提出更改（把它们添加到暂存区**）：`git add filename` (针对特定文件)、`git add *`(所有文件)、`git add *.txt`（支持通配符，所有 .txt 文件）
-3.  **忽略文件**：`.gitignore` 文件
-4.  **提交更新:** `git commit -m "代码提交信息"` （每次准备提交前，先用 `git status` 看下，是不是都已暂存起来了， 然后再运行提交命令 `git commit`）
-5.  **跳过使用暂存区域更新的方式** : `git commit -a -m "代码提交信息"`。 `git commit` 加上 `-a` 选项，Git 就会自动把所有已经跟踪过的文件暂存起来一并提交，从而跳过 `git add` 步骤。
-6.  **移除文件** ：`git rm filename` （从暂存区域移除，然后提交。）
-7.  **对文件重命名** ：`git mv README.md README`(这个命令相当于`mv README.md README`、`git rm README.md`、`git add README` 这三条命令的集合)
 
-### 推送改动到远程仓库
+*   git add files 把文件的修改添加到暂存区
+*   git commit 把暂存区的修改提交到当前分支，提交之后暂存区就被清空了
+*   git reset -- files 使用当前分支上的修改覆盖暂存区，用来撤销最后一次 git add files
+*   git checkout -- files 使用暂存区的修改覆盖工作目录，用来撤销本地修改
 
-*   如果你还没有克隆现有仓库，并欲将你的仓库连接到某个远程服务器，你可以使用如下命令添加：`git remote add origin <server>` ,比如我们要让本地的一个仓库和 Github 上创建的一个仓库关联可以这样`git remote add origin https://github.com/xxx/test.git`
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0rcxfh7j30sj0hfaap.jpg" alt="img" style="zoom:50%;" />
 
-*   将这些改动提交到远端仓库：`git push origin master` (可以把 *master* 换成你想要推送的任何分支)
+可以跳过暂存区域直接从分支中取出修改，或者直接提交修改到分支中。
 
-    如此就能够将你的改动推送到所添加的服务器上去了。
+*   git commit -a 直接把所有文件的修改添加到暂存区然后执行提交
+*   git checkout HEAD -- files 取出最后一次修改，可以用来进行回滚操作
 
-### 远程仓库的移除与重命名
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0rddh3uj30tf0h5aam.jpg" alt="img" style="zoom:50%;" />
 
-*   将 test 重命名为 test1：`git remote rename test test1`
-*   移除远程仓库 test1: `git remote rm test1`
+## 分支实现
 
-### 查看提交历史
+使用指针将每个提交连接成一条时间线，HEAD 指针指向当前分支指针。
 
-在提交了若干更新，又或者克隆了某个项目之后，你也许想回顾下提交历史。 完成这个任务最简单而又有效的工具是 `git log` 命令。`git log` 会按提交时间列出所有的更新，最近的更新排在最上面。
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0xkrfkdj30wr0dd0tc.jpg" alt="img" style="zoom:50%;" />
 
-**可以添加一些参数来查看自己希望看到的内容：**
+新建分支是新建一个指针指向时间线的**最后一个节点**，并让 HEAD 指针指向新分支，表示新分支成为当前分支。
 
-只看某个人的提交记录：
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0xkbrhyj30xi0fv0tb.jpg" alt="img" style="zoom:50%;" />
 
-```shell
-git log --author=slimshady
+每次提交只会让当前分支指针向前移动，而其它分支指针不会移动。
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0xjso19j30wr0gf0tb.jpg" alt="img" style="zoom:50%;" />
+
+合并分支也只需要改变指针即可。
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg0xjkyvqj30w90gbq3h.jpg" alt="img" style="zoom:50%;" />
+
+## 冲突
+
+当两个分支都对同一个文件的**同一行**进行了修改，在分支合并时就会产生冲突。
+
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg156vrrdj30xa0it3z8.jpg" alt="img" style="zoom:50%;" />
+
+Git 会使用` <<<<<<< ，======= ，>>>>>>>` 标记出不同分支的内容，只需要把不同分支中冲突部分修改成一样就能解决冲突。
+
+```
+<<<<<<< HEAD
+Creating a new branch is quick & simple.
+=======
+Creating a new branch is quick AND simple.
+>>>>>>> feature1
 ```
 
-### 撤销操作
+## Fast forward
 
-有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 `--amend` 选项的提交命令尝试重新提交：
+"快进式合并"（fast-farward merge），会直接将 master 分支指向合并的分支，这种模式下进行分支合并会丢失分支信息，也就不能在分支历史上看出分支信息。
 
-```shell
-git commit --amend
+可以在合并时加上 --no-ff 参数来禁用 Fast forward 模式，并且加上 -m 参数让合并时产生一个新的 commit。
+
+```
+$ git merge --no-ff -m "merge with no-ff" devCopy to clipboardErrorCopied
 ```
 
-取消暂存的文件
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg16fmyvvj30vm0hi3zb.jpg" alt="img" style="zoom:50%;" />
 
-```shell
-git reset filename
+## 储藏（Stashing）
+
+在一个分支上操作之后，如果还没有将修改提交到分支上，此时进行切换分支，那么**另一个分支上也能看到新的修改**。这是因为**所有分支都共用一个工作区**的缘故。
+
+可以使用 git stash 将当前分支的修改储藏起来，此时当前工作区的所有修改都会被存到栈中，也就是说当前工作区是干净的，没有任何未提交的修改。此时就可以安全的切换到其它分支上了。
+
+```
+$ git stash
+Saved working directory and index state \ "WIP on master: 049d078 added the index file"
+HEAD is now at 049d078 added the index file (To restore them type "git stash apply")
 ```
 
-撤消对文件的修改:
+>   该功能可以用于 bug 分支的实现。如果当前正在 dev 分支上进行开发，但是此时 master 上有个 bug 需要修复，但是 dev 分支上的开发还未完成，不想立即提交。在新建 bug 分支并切换到 bug 分支之前就需要使用 git stash 将 dev 分支的未提交修改储藏起来。
 
-```shell
-git checkout -- filename
+## SSH 传输设置
+
+Git 仓库和 Github 中心仓库之间的传输是通过 SSH 加密。
+
+如果工作区下没有 .ssh 目录，或者该目录下没有 id_rsa 和 id_rsa.pub 这两个文件，可以通过以下命令来创建 SSH Key：
+
+```
+$ ssh-keygen -t rsa -C "youremail@example.com"
 ```
 
-假如你想丢弃你在本地的所有改动与提交，可以到服务器上获取最新的版本历史，并将你本地主分支指向它：
+然后把公钥 id_rsa.pub 的内容复制到 Github "Account settings" 的 SSH Keys 中。
 
-```shell
-git fetch origin
-git reset --hard origin/master
-```
+## .gitignore 文件
 
-### 分支
+忽略以下文件：
 
-分支是用来将特性开发绝缘开来的。在你创建仓库的时候，*master* 是“默认的”分支。可以在其他分支上进行开发，完成后再将它们合并到主分支上。
+*   操作系统自动生成的文件，比如缩略图；
+*   编译生成的中间文件，比如 Java 编译产生的 .class 文件；
+*   自己的敏感信息，比如存放口令的配置文件。
 
-我们通常在开发新功能、修复一个紧急 bug 等等时候会选择创建分支。单分支开发好还是多分支开发好，还是要看具体场景来说。
+不需要全部自己编写，可以到 https://github.com/github/gitignore 中进行查询。
 
-创建一个名字叫做 test 的分支：
+## Git 命令一览
 
-```shell
-git branch test
-```
+![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg16ezy5qj30j80pr0v7.jpg)
 
-切换当前分支到 test（当你切换分支的时候，Git 会重置你的工作目录，使其看起来像回到了你在那个分支上最后一次提交的样子。 Git 会自动添加、删除、修改文件以确保此时你的工作目录和这个分支最后一次提交时的样子一模一样）
+详细：
 
-```shell
-git checkout test
-```
-
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf4qv777vdj30f8032q2w.jpg)
-
-你也可以直接这样创建分支并切换过去(上面两条命令的合写)
-
-```shell
-git checkout -b test
-```
-
-切换到主分支
-
-```shell
-git checkout master
-```
-
-合并分支(可能会有冲突)
-
-```shell
-git merge test
-```
-
-把新建的分支删掉
-
-```shell
-git branch -d test
-```
-
-将分支推送到远端仓库（推送成功后其他人可见）：
-
-```shell
-git push origin 
-```
+![image-20200604101359466](https://tva1.sinaimg.cn/large/007S8ZIlgy1gfg1da1xjqj313h0u0qnf.jpg)
 
