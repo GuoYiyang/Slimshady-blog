@@ -1,6 +1,6 @@
 # Linux
 
->   参考文档：https://snailclimb.gitee.io/javaguide/#/docs/operating-system/linux
+>   参考文档：[Linux](https://snailclimb.gitee.io/javaguide/#/docs/operating-system/linux)
 
 ## 初探Linux
 
