@@ -1,10 +1,12 @@
+# Java集合
+
 ## 集合概述
 
-#### 集合分类
+### 集合分类
 
 Java 容器分为 Collection 和 Map 两大类：
 
-<img src="../图片/collection集合.jpg" alt="collection集合" style="zoom: 67%;" />
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gfjfdooca0j30sw0lwq3p.jpg" alt="collection集合" style="zoom: 67%;" />
 
 Collection集合主要有List和Set两大接口
 
@@ -13,7 +15,7 @@ Collection集合主要有List和Set两大接口
 
 Map是一个键值对集合，存储键、值和之间的映射。 Key无序，唯一；value 不要求有序，允许重复。Map 的常用实现类：HashMap、TreeMap、HashTable、LinkedHashMap、ConcurrentHashMap
 
-#### 底层数据结构
+### 底层数据结构
 
 **List**
 
@@ -34,14 +36,14 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 -   HashTable： 数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的。
 -   TreeMap： 红黑树（自平衡的排序二叉树）
 
-#### 线程安全的集合类
+### 线程安全的集合类
 
 -   vector：就比arraylist多了个同步化机制（线程安全），因为效率较低，现在已经不太建议使用。在web应用中，特别是前台页面，往往效率（页面响应速度）是优先考虑的。
 -   stack：堆栈类，先进后出。
 -   hashtable：就比hashmap多了个线程安全。
 -   enumeration：枚举，相当于迭代器。
 
-#### 快速失败(fail-fast)和安全失败(fail-safe)
+### 快速失败(fail-fast)和安全失败(fail-safe)
 
 **快速失败（fail—fast）**
 
@@ -63,13 +65,13 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 
 场景：java.util.concurrent包下的容器都是安全失败，可以在多线程下并发使用，并发修改。
 
-#### 集合和数组的区别
+### 集合和数组的区别
 
 -   数组是固定长度的；集合可变长度的。
 -   数组可以存储基本数据类型，也可以存储引用数据类型；集合只能存储引用数据类型。
 -   数组存储的元素必须是同一个数据类型；集合存储的对象可以是不同数据类型。
 
-#### 使用集合框架的好处
+### 使用集合框架的好处
 
 1.  容量自增长；
 2.  提供了高性能的数据结构和算法，使编码更轻松，提高了程序速度和质量；
@@ -77,7 +79,7 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 4.  可以方便地扩展或改写集合，提高代码复用性和可操作性;
 5.  通过使用JDK自带的集合类，可以降低代码维护和学习新API成本。
 
-#### 确保一个集合不能被修改
+### 确保一个集合不能被修改
 
 可以使用 Collections. unmodifiableCollection(Collection c) 方法来创建一个只读集合，这样改变集合的任何操作都会抛出 Java. lang. UnsupportedOperationException 异常：
 
@@ -89,14 +91,14 @@ clist. add("y"); // 运行时此行报错
 System. out. println(list. size());
 ```
 
-#### comparable 和 comparator
+### comparable 和 comparator
 
 -   comparable接口出自java.lang包，它有一个compareTo(Object obj)方法用来排序
 -   comparator接口出自 java.util 包，它有一个compare(Object obj1, Object obj2)方法用来排序
 
 一般我们需要对一个集合使用自定义排序时，我们就要重写compareTo方法或compare方法，当我们需要对某一个集合实现两种排序方式，比如一个song对象中的歌名和歌手名分别采用一种排序方法的话，我们可以重写compareTo方法和使用自制的Comparator方法或者以两个Comparator来实现歌名排序和歌星名排序，第二种代表我们只能使用两个参数版的Collections.sort()。
 
-#### Collection 和 Collections 
+### Collection 和 Collections 
 
 -   java.util.Collection 是一个集合接口（集合类的一个顶级接口）。它提供了对集合对象进行基本操作的通用接口方法。Collection接口在Java 类库中有很多具体的实现。Collection接口的意义是为各种具体的集合提供了最大化的统一操作方式，其直接继承接口有List与Set。
 -   Collections则是集合类的一个工具类/帮助类，其中提供了一系列静态方法，用于对集合中元素进行排序、搜索以及线程安全等各种操作。
@@ -249,7 +251,7 @@ Java.util.concurrent.BlockingQueue是一个队列，在进行检索或移除一�
 
 ## Map接口
 
-#### HashMap 的实现原理
+### HashMap 的实现原理
 
 put元素时，利用key的hashCode值计算出当前对象的元素在数组中的下标存储时，如果出现hash值相同的key，此时有两种情况：
 
@@ -258,11 +260,11 @@ put元素时，利用key的hashCode值计算出当前对象的元素在数组中
 
 获取时，直接找到hash值对应的下标，在进一步判断key是否相同，从而找到对应值。
 
-#### put方法的具体流程
+### put方法的具体流程
 
 put的时候，首先计算 key的hash值，这里调用了 hash方法，hash方法实际是让key.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：==高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞==。按照函数注释，因为bucket数组大小是2的幂，计算下标index = (table.length - 1) & hash，如果不做 hash 处理，相当于散列生效的只有几个低 bit 位，为了减少散列的碰撞，设计者综合考虑了之后，使用高16bit和低16bit异或来简单处理减少碰撞，而且JDK8中用了复杂度 O（logn）的树结构来提升碰撞下的性能。
 
-#### HashMap的扩容操作
+### HashMap的扩容操作
 
 -   在jdk1.8中，在hashmap中的键值对大于阀值时或者初始化时，就调用resize方法进行扩容；
 -   每次扩展的时候，都是扩展2倍；
@@ -273,7 +275,7 @@ resize() 方法表示的在进行第一次初始化时会对其进行扩容，�
 -   在1.7中，扩容之后需要重新去计算其Hash值，根据Hash值对其进行分发；
 -   在1.8版本中，则是根据在同一个桶的位置中进行判断(e.hash & oldCap)是否为0，重新进行hash分配后，该元素的位置要么停留在原始位置，要么移动到原始位置+增加的数组大小这个位置上。
 
-#### Hash冲突
+### Hash冲突
 
 **哈希的概念：**
 
@@ -331,7 +333,7 @@ static final int hash(Object key) {
 
 当链表长度大于阈值（默认为8）且数组长度大于64时，将链表转化为红黑树，以减少搜索时间，从原来的O(n)到O(logn)。（链表长度大于阈值，但是数组长度小于64时会首先进行扩容）
 
-#### 链表成环（死循环）
+### 链表成环（死循环）
 
 多线程操作HashMap时可能引起死循环。
 
@@ -346,7 +348,7 @@ static final int hash(Object key) {
 
 我认为即使不会出现死循环，但是通过源码看到put/get方法都没有加同步锁，多线程情况最容易出现的就是：无法保证上一秒put的值，下一秒get的时候还是原值，所以线程安全还是无法保证。
 
-#### 类作为key的条件
+### 类作为key的条件
 
 可以使用任何类作为 Map 的 key，然而在使用之前，需要考虑以下几点：
 
@@ -372,7 +374,7 @@ String、Integer等包装类的特性能够保证Hash值的不可更改性和计
 -   重写hashCode()是因为需要计算存储数据的存储位置，需要注意不要试图从散列码计算中排除掉一个对象的关键部分来提高性能，这样虽然能更快但可能会导致更多的Hash碰撞；
 -   重写equals()方法，需要遵守自反性、对称性、传递性、一致性以及对于任何非null的引用值x，x.equals(null)必须返回false的这几个特性，目的是为了保证key在哈希表中的唯一性；
 
-#### HashMap 与 HashTable 区别
+### HashMap 与 HashTable 区别
 
 1.  线程安全： HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果要保证线程安全的话就使用 ConcurrentHashMap 吧！）
 
@@ -390,7 +392,7 @@ String、Integer等包装类的特性能够保证Hash值的不可更改性和计
 
 在 Hashtable 的类注释可以看到，Hashtable 是保留类不建议使用，推荐在单线程环境下使用 HashMap 替代，如果需要多线程使用则用 ConcurrentHashMap 替代。
 
-#### ConcurrentHashMap 
+### ConcurrentHashMap 
 
 **底层数据结构**
 
@@ -410,7 +412,7 @@ JDK1.7的 ConcurrentHashMap 底层采用 分段的数组+链表实现，JDK1.8 �
 
 JDK1.8 的时候已经摒弃了Segment的概念，取而代之的是采用Node + CAS + Synchronized来保证并发安全进行实现。synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发。
 
-#### TreeMap 和 TreeSet 
+### TreeMap 和 TreeSet 
 
 -   TreeSet 要求存放的对象所属的类必须实现 Comparable 接口，该接口提供了比较元素的 compareTo()方法，当插入元素时会回调该方法比较元素的大小。
 -   TreeMap 要求存放的键值对映射的键必须实现 Comparable 接口，从而根据键对元素进行排序。
