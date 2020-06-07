@@ -416,3 +416,4 @@ JDK1.8 的时候已经摒弃了Segment的概念，取而代之的是采用Node +
 
 -   TreeSet 要求存放的对象所属的类必须实现 Comparable 接口，该接口提供了比较元素的 compareTo()方法，当插入元素时会回调该方法比较元素的大小。
 -   TreeMap 要求存放的键值对映射的键必须实现 Comparable 接口，从而根据键对元素进行排序。
+
