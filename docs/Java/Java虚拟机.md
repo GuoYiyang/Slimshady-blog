@@ -2,7 +2,7 @@
 
 ##  JVM 的主要组成部分
 
-![JVM主要组成部分](https://tva1.sinaimg.cn/large/007S8ZIlly1gf004cfo6tj30y90jnjxw.jpg)
+<img src="https://tva1.sinaimg.cn/large/007S8ZIlly1gf004cfo6tj30y90jnjxw.jpg" alt="JVM主要组成部分" style="zoom: 67%;" />
 
 JVM包含两个子系统和两个组件，两个子系统为Class loader(类装载)、Execution engine(执行引擎)；两个组件为Runtime data area(运行时数据区)、Native Interface(本地接口)。
 
