@@ -507,10 +507,6 @@ private WebSite webSite;
 System.out.println(webSite.getUrl());//https://javaguide.cn/
 ```
 
-**Spring加载配置文件的优先级**
-
-<img src="SpringBoot.assets/68747470733a2f2f6d792d626c6f672d746f2d7573652e6f73732d636e2d6265696a696e672e616c6979756e63732e636f6d2f323031392d31312f726561642d636f6e6669672d70726f706572746965732d7072696f726974792e6a7067.jpeg" alt="img" style="zoom:50%;" />
-
 ### 6. JSR参数校验
 
 数据的校验的重要性就不用说了，即使在前端对数据进行校验的情况下，我们还是要对传入后端的数据再进行一遍校验，避免用户绕过浏览器直接通过一些 HTTP 工具直接向后端请求一些违法数据。
