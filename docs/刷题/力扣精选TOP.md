@@ -1047,3 +1047,54 @@ class Solution {
 }
 ```
 
+## 22. 括号生成
+
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+
+>   示例：
+>
+>   ```
+>   输入：n = 3
+>   
+>   输出：[
+>          "((()))",
+>          "(()())",
+>          "(())()",
+>          "()(())",
+>          "()()()"
+>        ]
+>   ```
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new LinkedList<>();
+        //总共需要生成2n个字符的数组（左括号n个，右括号n个）
+        backtrack(0, 0, new char[2 * n], result);
+        return result;
+    }
+
+    //track为当前选择的组合，left为组合中左括号数量，right为组合中右括号数量
+    public void backtrack(int left, int right, char[] track, List<String> result) {
+        if (left + right == track.length) {
+            //如果左括号数量等于右括号数量，并且长度达到要求，则是一个合法的结果，将其加入结果集
+            if (left == right) {
+                result.add(new String(track));
+            }
+            return;
+        }
+        //如果左括号数量小于右括号数量，不合法
+        if (left < right) {
+            return;
+        }
+        //每个位置有两种情况：1.左括号 2.右括号 递归列举所有的情况
+        //选择左括号作为当前元素
+        track[left + right] = '(';
+        backtrack(left + 1, right, track, result);
+        //选择右括号作为当前元素
+        track[left + right] = ')';
+        backtrack(left, right + 1, track, result);
+    }
+}
+```
+

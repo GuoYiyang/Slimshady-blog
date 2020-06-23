@@ -24,7 +24,7 @@
 
 [Java异常](Java/Java异常.md)
 
-[JavaStream](Java/JavaStream.md) 
+[Lambda、函数式接口和Stream](Java/Lambda、函数式接口和Stream.md) 
 
 [Java设计模式](Java/Java设计模式.md)
 
