@@ -289,3 +289,198 @@ class CQueue {
 }
 ```
 
+## 剑指 Offer 10- I. 斐波那契数列
+
+写一个函数，输入 n ，求斐波那契（Fibonacci）数列的第 n 项。斐波那契数列的定义如下：
+
+```
+F(0) = 0,   F(1) = 1
+F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
+```
+
+斐波那契数列由 0 和 1 开始，之后的斐波那契数就是由之前的两数相加而得出。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+>   示例 1：
+>
+>   输入：n = 2
+>
+>   输出：1
+>
+>   示例 2：
+>
+>   输入：n = 5
+>
+>   输出：5
+>
+>
+>   提示：
+>
+>   0 <= n <= 100
+>
+
+```java
+class Solution {
+    public int fib(int n) {
+        if(n == 0)
+            return 0;
+        int[] result = new int[n + 1];
+        result[0] = 0;
+        result[1] = 1;
+        for(int i = 2; i <= n; i++)
+            result[i] = (result[i - 2] + result[i - 1])  % 1000000007;
+        return result[n];
+    }
+}
+```
+
+## 剑指 Offer 10- II. 青蛙跳台阶问题
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+>   示例 1：
+>
+>   输入：n = 2
+>
+>   输出：2
+>
+>   示例 2：
+>
+>   输入：n = 7
+>
+>   输出：21
+>
+>   提示：
+>
+>   0 <= n <= 100
+>
+
+```java
+class Solution {
+    public int numWays(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        int[] result = new int[n + 1];
+        result[1] = 1;
+        result[2] = 2;
+        for (int i = 3; i <= n; i ++) {
+            result[i] = (result[i - 1] + result[i - 2]) % 1000000007;
+        }
+        return result[n];
+    }
+}
+```
+
+## 剑指 Offer 11. 旋转数组的最小数字
+
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。  
+
+>   示例 1：
+>
+>   输入：[3,4,5,1,2]
+>
+>   输出：1
+>
+>   示例 2：
+>
+>   输入：[2,2,2,0,1]
+>
+>   输出：0
+
+```java
+class Solution {
+    public int minArray(int[] numbers) {
+        if (numbers.length == 0) {
+            return 0;
+        }
+        for (int i = 1; i < numbers.length; i ++) {
+            if (numbers[i] < numbers[i - 1]) {
+                return numbers[i];
+            }
+        }
+        return numbers[0];
+    }
+}
+```
+
+## 剑指 Offer 12. 矩阵中的路径
+
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一格开始，每一步可以在矩阵中向左、右、上、下移动一格。如果一条路径经过了矩阵的某一格，那么该路径不能再次进入该格子。例如，在下面的3×4的矩阵中包含一条字符串“bfce”的路径（路径中的字母用加粗标出）。
+
+```
+[["a","b","c","e"],
+["s","f","c","s"],
+["a","d","e","e"]]
+```
+
+但矩阵中不包含字符串“abfb”的路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入这个格子。
+
+>   示例 1：
+>
+>   输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+>
+>   输出：true
+>
+>   示例 2：
+>
+>   输入：board = [["a","b"],["c","d"]], word = "abcd"
+>
+>   输出：false
+>
+>   提示：
+>
+>   1 <= board.length <= 200
+>
+>   1 <= board[i].length <= 200
+
+```java
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0) {
+            return false;
+        }
+        char[] chars = word.toCharArray();
+        // 依次遍历二维矩阵的所有节点
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (dfs(board, chars, i, j, 0)) {
+                    // 剪枝，已经找到，没有必要再往下继续
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean dfs(char[][] board, char[] words, int line, int row, int index) {
+        // 剪枝
+        if (line >= board.length 
+        || row >= board[0].length 
+        || line < 0 
+        || row < 0 
+        || board[line][row] != words[index]) {
+            return false;
+        }
+        // 单词的最后一个字母也匹配上了,整体匹配完成
+        if (index == words.length - 1) {
+            return true;
+        }
+        // 已经匹配上的字母不能重复匹配，暂时修改节点的值
+        char temp = board[line][row];
+        board[line][row] = '/';
+        boolean ifExist = dfs(board, words, line + 1, row, index + 1) 
+                        || dfs(board, words, line - 1, row, index + 1)
+                        || dfs(board, words, line, row + 1, index + 1) 
+                        || dfs(board, words, line, row - 1, index + 1);
+        // 还原节点上的值，以免影响下面的匹配
+        board[line][row] = temp;
+        // 返回这个节点开始的整体匹配结果 
+        return ifExist;
+    }
+}
+```
+
