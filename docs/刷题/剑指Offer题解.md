@@ -541,3 +541,79 @@ class Solution {
     }
 }
 ```
+
+## 剑指 Offer 14- I. 剪绳子
+
+给你一根长度为 n 的绳子，请把绳子剪成整数长度的 m 段（m、n都是整数，n>1并且m>1），每段绳子的长度记为 k[0],k[1]...k[m-1] 。请问 k[0]*k[1]*...*k[m-1] 可能的最大乘积是多少？例如，当绳子的长度是8时，我们把它剪成长度分别为2、3、3的三段，此时得到的最大乘积是18。
+
+>   示例 1：
+>
+>   输入: 2
+>
+>   输出: 1
+>
+>   解释: 2 = 1 + 1, 1 × 1 = 1
+>
+>   示例 2:
+>
+>   输入: 10
+>
+>   输出: 36
+>
+>   解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36
+>
+>   提示：
+>
+>   2 <= n <= 58
+
+```java
+/**
+* 解题思路，找出最优解的规律
+* 当target等于1，2，3的时候，结果是固定的
+* 当target大于3的时候，可以看以下数据
+* target=4, 最优解：2 2
+* target=5, 最优解：3 2
+* target=6, 最优解：3 3
+* target=7, 最优解：3 2 2
+* target=8, 最优解：3 3 2
+* target=9, 最优解：3 3 3
+* target=10,最优解：3 3 2 2
+* target=11,最优解：3 3 3 2
+* target=12,最优解：3 3 3 3
+* target=13,最优解：3 3 3 2 2
+* target=14,最优解：3 3 3 3 2
+* target=15,最优解：3 3 3 3 3
+* 所以不难发现3和2的个数规律
+*/
+class Solution {
+    public int cuttingRope(int n) {
+        if(n <= 1){
+            return 0;
+        }
+        if(n == 2){
+            return 1;
+        }
+        if(n == 3){
+            return 2;
+        }
+        //记录数字总个数
+        int length = 0;
+        //记录数字2的个数
+        int length2 = 0;
+        if (n % 3 == 0) {
+            length = n / 3;
+            length2 = 0;
+        } else {
+            length = n / 3 + 1;
+            length2 = 3 - n % 3;
+        }
+        int result = 1;
+        //算乘积
+        for(int i = 0; i < length; i++){
+            result = result * ((i < length - length2) ? 3 : 2);
+        }
+        return result;
+    }
+}
+```
+
