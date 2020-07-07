@@ -6,7 +6,7 @@
 
 **SQL 是用于访问和处理数据库的标准的计算机语言。**
 
-#### 什么是 SQL
+### 什么是 SQL
 
 *   SQL 指结构化查询语言
 *   SQL 使我们有能力访问数据库
@@ -14,7 +14,7 @@
 
 注：ANSI，美国国家标准化组织
 
-#### DBMS - 数据库管理系统（Database Management System）
+### DBMS - 数据库管理系统（Database Management System）
 
 数据库管理系统是一种可以访问数据库中数据的计算机程序。
 
@@ -22,7 +22,7 @@ DBMS 使我们有能力在数据库中提取、修改或者存贮信息。
 
 不同的 DBMS 提供不同的函数供查询、提交以及修改数据。
 
-#### RDBMS- 关系数据库管理系统（Relational Database Management System）
+### RDBMS- 关系数据库管理系统（Relational Database Management System）
 
 RDBMS 是 SQL 的基础，同样也是所有现代数据库系统的基础，比如 MS SQL Server, IBM DB2, Oracle, MySQL 以及 Microsoft Access。
 
@@ -30,7 +30,7 @@ RDBMS 中的数据存储在被称为表（tables）的数据库对象中。
 
 表是相关的数据项的集合，它由列和行组成。
 
-#### DML 和 DDL
+### DML 和 DDL
 
 可以把 SQL 分为两个部分：数据操作语言 (DML) 和 数据定义语言 (DDL)。
 
@@ -55,13 +55,13 @@ SQL 中最重要的 DDL 语句:
 *   *CREATE INDEX* - 创建索引（搜索键）
 *   *DROP INDEX* - 删除索引
 
-#### 注意事项
+### 注意事项
 
-##### 大小写问题
+#### 大小写问题
 
 一定要记住，SQL 对大小写不敏感！
 
-##### SQL 语句后面的分号
+#### SQL 语句后面的分号
 
 某些数据库系统要求在每条 SQL 命令的末端使用分号。
 
@@ -69,7 +69,7 @@ SQL 中最重要的 DDL 语句:
 
 ## 基础语法
 
-#### SELECT
+### SELECT
 
 SELECT 语句用于从表中选取数据。
 
@@ -87,7 +87,7 @@ SELECT * FROM 表名称
 
 **注释：**SQL 语句对大小写不敏感。SELECT 等效于 select。
 
-#### SELECT DISTINCT
+### SELECT DISTINCT
 
 在表中，可能会包含重复值。这并不成问题，不过，有时您也许希望仅仅列出不同（distinct）的值。
 
@@ -97,7 +97,7 @@ SELECT * FROM 表名称
 SELECT DISTINCT 列名称 FROM 表名称
 ```
 
-#### WHERE
+### WHERE
 
 如需有条件地从表中选取数据，可将 WHERE 子句添加到 SELECT 语句。
 
@@ -134,7 +134,7 @@ AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。
 
 如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。
 
-#### GROUP BY
+### GROUP BY
 
 GROUP BY 语句用于结合合计函数，根据一个或多个列对结果集进行分组。
 
@@ -154,7 +154,7 @@ SELECT Customer,OrderDate,SUM(OrderPrice) FROM Orders
 GROUP BY Customer,OrderDate
 ```
 
-#### HAVING
+### HAVING
 
 在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与合计函数一起使用。
 
@@ -166,7 +166,7 @@ GROUP BY column_name
 HAVING aggregate_function(column_name) operator valu
 ```
 
-#### ORDER BY
+### ORDER BY
 
 ORDER BY 语句用于根据指定的列对结果集进行排序。
 
@@ -184,7 +184,7 @@ SELECT exp1, exp2 FROM table1 ORDER BY exp1, exp2 DESC
 
 先对exp1进行升序排序，若exp1相同，则按照exp2进行降序排序；若exp1没有重复，则不会对exp2排序。
 
-#### INSERT INTO
+### INSERT INTO
 
 INSERT INTO 语句用于向表格中插入新的行。
 
@@ -198,7 +198,7 @@ INSERT INTO 表名称 VALUES (值1, 值2,....)
 INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
 ```
 
-#### UPDATE
+### UPDATE
 
 Update 语句用于修改表中的数据。
 
@@ -206,7 +206,7 @@ Update 语句用于修改表中的数据。
 UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 ```
 
-#### DELETE
+### DELETE
 
 DELETE 语句用于删除表中的行。
 
@@ -228,7 +228,7 @@ DELETE FROM table_name
 DELETE * FROM table_name
 ```
 
-#### CREATE DATABASE
+### CREATE DATABASE
 
 CREATE DATABASE 用于创建数据库。
 
@@ -236,7 +236,7 @@ CREATE DATABASE 用于创建数据库。
 CREATE DATABASE database_name
 ```
 
-#### CREATE TABLE
+### CREATE TABLE
 
 CREATE TABLE 语句用于创建数据库中的表。
 
@@ -260,7 +260,7 @@ CREATE TABLE 表名称
 | varchar(size)                                                | 容纳可变长度的字符串（可容纳字母、数字以及特殊的字符）。在括号中规定字符串的最大长度。 |
 | date(yyyymmdd)                                               | 容纳日期。                                                   |
 
-#### ALTER TABLE 
+### ALTER TABLE 
 
 ALTER TABLE 语句用于在已有的表中添加、修改或删除列。
 
@@ -287,7 +287,7 @@ ALTER TABLE table_name
 ALTER COLUMN column_name datatype
 ```
 
-#### CREATE INDEX
+### CREATE INDEX
 
 **CREATE INDEX 语句用于在表中创建索引。**
 
@@ -319,7 +319,7 @@ CREATE UNIQUE INDEX index_name
 ON table_name (column_name)
 ```
 
-#### CREATE VIEW
+### CREATE VIEW
 
 什么是视图？
 
@@ -340,11 +340,9 @@ WHERE condition
 
 **注释：**视图总是显示最近的数据。每当用户查询视图时，数据库引擎通过使用 SQL 语句来重建数据。
 
-
-
 ## 操作符
 
-#### TOP (LIMIT)
+### TOP (LIMIT)
 
 TOP 子句用于规定要返回的记录的数目。
 
@@ -360,7 +358,7 @@ FROM table_name
 LIMIT numbe
 ```
 
-#### LIKE 
+### LIKE 
 
 LIKE 操作符用于在 WHERE 子句中搜索列中的指定模式。
 
@@ -385,7 +383,7 @@ SQL 通配符必须与 LIKE 运算符一起使用。
 | [charlist]                 | 字符列中的任何单一字符     |
 | [^charlist]或者[!charlist] | 不在字符列中的任何单一字符 |
 
-#### IN 
+### IN 
 
 IN 操作符允许我们在 WHERE 子句中规定多个值。
 
@@ -395,7 +393,7 @@ FROM table_name
 WHERE column_name IN (value1,value2,...)
 ```
 
-#### BETWEEN 
+### BETWEEN 
 
 操作符 BETWEEN ... AND 会选取介于两个值之间的数据范围。这些值可以是数值、文本或者日期。
 
@@ -408,7 +406,7 @@ BETWEEN value1 AND value2
 
 **重要事项：**不同的数据库对 BETWEEN...AND 操作符的处理方式是有差异的。所以，请检查你的数据库是如何处理 BETWEEN....AND 操作符的！
 
-#### SQL Alias
+### SQL Alias
 
 **通过使用 SQL，可以为列名称和表名称指定别名（Alias）。**
 
@@ -428,7 +426,7 @@ AS alias_name
 FROM table_name
 ```
 
-#### JOIN
+### JOIN
 
 **SQL join 用于根据两个或多个表中的列之间的关系，从这些表中查询数据。**
 
@@ -447,7 +445,7 @@ FROM table_name
 *   RIGHT JOIN: 即使左表中没有匹配，也从右表返回所有的行
 *   FULL JOIN: 只要其中一个表中存在匹配，就返回行
 
-##### INNER JOIN 
+#### INNER JOIN 
 
 在表中存在至少一个匹配时，INNER JOIN 关键字返回行。
 
@@ -460,7 +458,7 @@ ON table_name1.column_name=table_name2.column_name
 
 **注释：**INNER JOIN 与 JOIN 是相同的。
 
-##### LEFT JOIN 
+#### LEFT JOIN 
 
 LEFT JOIN 关键字会从左表 (table_name1) 那里返回所有的行，即使在右表 (table_name2) 中没有匹配的行。
 
@@ -473,7 +471,7 @@ ON table_name1.column_name=table_name2.column_name
 
 **注释：**在某些数据库中， LEFT JOIN 称为 LEFT OUTER JOIN。
 
-##### RIGHT JOIN
+#### RIGHT JOIN
 
 RIGHT JOIN 关键字会右表 (table_name2) 那里返回所有的行，即使在左表 (table_name1) 中没有匹配的行。
 
@@ -486,7 +484,7 @@ ON table_name1.column_name=table_name2.column_name
 
 **注释：**在某些数据库中， RIGHT JOIN 称为 RIGHT OUTER JOIN。
 
-##### FULL JOIN
+#### FULL JOIN
 
 只要其中某个表存在匹配，FULL JOIN 关键字就会返回行。
 
@@ -499,7 +497,7 @@ ON table_name1.column_name=table_name2.column_name
 
 **注释：**在某些数据库中， FULL JOIN 称为 FULL OUTER JOIN。
 
-#### UNION
+### UNION
 
 UNION 操作符用于合并两个或多个 SELECT 语句的结果集。
 
@@ -525,7 +523,7 @@ SELECT column_name(s) FROM table_name2
 
 另外，**UNION 结果集中的列名总是等于 UNION 中第一个 SELECT 语句中的列名**。
 
-#### SELECT INTO
+### SELECT INTO
 
 SELECT INTO 语句从一个表中选取数据，然后把数据插入另一个表中。
 
@@ -547,7 +545,7 @@ INTO new_table_name [IN externaldatabase]
 FROM old_tablename
 ```
 
-#### SQL DROP
+### SQL DROP
 
 **通过使用 DROP 语句，可以轻松地删除索引、表和数据库。**
 
@@ -569,7 +567,7 @@ DROP DATABASE 语句用于删除数据库：
 DROP DATABASE 数据库名称
 ```
 
-#### TRUNCATE
+### TRUNCATE
 
 如果我们仅仅需要除去表内的数据，但并不删除表本身，那么我们该如何做呢？
 
@@ -579,7 +577,7 @@ DROP DATABASE 数据库名称
 TRUNCATE TABLE 表名称
 ```
 
-#### NULL
+### NULL
 
 如果表中的某个列是可选的，那么我们可以在不向该列添加值的情况下插入新记录或更新已有的记录。这意味着该字段将以 NULL 值保存。
 
@@ -597,19 +595,19 @@ NULL 用作未知的或不适用的值的占位符。
 
 ## 约束 (Constraints)
 
-#### 约束简介
+### 约束简介
 
 约束用于限制加入表的数据的类型。
 
 可以在创建表时规定约束（通过 CREATE TABLE 语句），或者在表创建之后也可以（通过 ALTER TABLE 语句）。
 
-#### NOT NULL
+### NOT NULL
 
 NOT NULL 约束强制列不接受 NULL 值。
 
 NOT NULL 约束强制字段始终包含值。这意味着，如果不向字段添加值，就无法插入新记录或者更新记录。
 
-#### UNIQUE
+### UNIQUE
 
 UNIQUE 约束唯一标识数据库表中的每条记录。
 
@@ -619,7 +617,7 @@ PRIMARY KEY 拥有自动定义的 UNIQUE 约束。
 
 请注意，**每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束**。
 
-#### PRIMARY KEY
+### PRIMARY KEY
 
 PRIMARY KEY 约束唯一标识数据库表中的每条记录。
 
@@ -629,7 +627,7 @@ PRIMARY KEY 约束唯一标识数据库表中的每条记录。
 
 每个表都应该有一个主键，并且每个表只能有一个主键。
 
-#### FOREIGN KEY
+### FOREIGN KEY
 
 一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
 
@@ -637,7 +635,7 @@ FOREIGN KEY 约束用于预防破坏表之间连接的动作。
 
 FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。
 
-#### CHECK
+### CHECK
 
 CHECK 约束用于限制列中的值的范围。
 
@@ -645,13 +643,13 @@ CHECK 约束用于限制列中的值的范围。
 
 如果对一个表定义 CHECK 约束，那么此约束会在特定的列中对值进行限制。
 
-#### DEFAULT
+### DEFAULT
 
 DEFAULT 约束用于向列中插入默认值。
 
 如果没有规定其他的值，那么会将默认值添加到所有的新记录。
 
-#### AUTO INCREMENT
+### AUTO INCREMENT
 
 **Auto-increment 会在新记录插入表中时生成一个唯一的数字。**
 
@@ -661,7 +659,7 @@ DEFAULT 约束用于向列中插入默认值。
 
 ## 函数
 
-#### 函数简介
+### 函数简介
 
 内建 SQL 函数的语法是：
 
@@ -681,7 +679,7 @@ SELECT function(列) FROM 表
 
     Scalar 函数的操作面向某个单一的值，并返回基于输入值的一个单一的值。
 
-#### AVG
+### AVG
 
 AVG 函数返回数值列的平均值。NULL 值不包括在计算中。
 
@@ -689,7 +687,7 @@ AVG 函数返回数值列的平均值。NULL 值不包括在计算中。
 SELECT AVG(column_name) FROM table_name
 ```
 
-#### COUNT
+### COUNT
 
 **SQL COUNT(column_name) 语法:**
 
@@ -717,7 +715,7 @@ SELECT COUNT(DISTINCT column_name) FROM table_name
 
 **注释：**COUNT(DISTINCT) 适用于 ORACLE 和 Microsoft SQL Server，但是无法用于 Microsoft Access。
 
-#### FIRST
+### FIRST
 
 FIRST() 函数返回指定的字段中第一个记录的值。
 
@@ -727,7 +725,7 @@ FIRST() 函数返回指定的字段中第一个记录的值。
 SELECT FIRST(column_name) FROM table_name
 ```
 
-#### LAST
+### LAST
 
 LAST() 函数返回指定的字段中最后一个记录的值。
 
@@ -737,7 +735,7 @@ LAST() 函数返回指定的字段中最后一个记录的值。
 SELECT LAST(column_name) FROM table_name
 ```
 
-#### MAX
+### MAX
 
 MAX 函数返回一列中的最大值。NULL 值不包括在计算中。
 
@@ -747,7 +745,7 @@ SELECT MAX(column_name) FROM table_name
 
 **注释：**MIN 和 MAX 也可用于文本列，以获得按字母顺序排列的最高或最低值。
 
-#### MIN
+### MIN
 
 MIN 函数返回一列中的最小值。NULL 值不包括在计算中。
 
@@ -757,7 +755,7 @@ SELECT MIN(column_name) FROM table_name
 
 **注释：**MIN 和 MAX 也可用于文本列，以获得按字母顺序排列的最高或最低值。
 
-#### SUM
+### SUM
 
 SUM 函数返回数值列的总数（总额）。
 
@@ -767,7 +765,7 @@ SELECT SUM(column_name) FROM table_name
 
 **合计函数 (比如 SUM) 常常需要添加 GROUP BY 语句。**
 
-#### UCASE
+### UCASE
 
 UCASE 函数把字段的值转换为大写。
 
@@ -775,7 +773,7 @@ UCASE 函数把字段的值转换为大写。
 SELECT UCASE(column_name) FROM table_name
 ```
 
-#### LCASE
+### LCASE
 
 LCASE 函数把字段的值转换为小写。
 
@@ -783,7 +781,7 @@ LCASE 函数把字段的值转换为小写。
 SELECT LCASE(column_name) FROM table_name
 ```
 
-#### MID
+### MID
 
 MID 函数用于从文本字段中提取字符。
 
@@ -797,7 +795,7 @@ SELECT MID(column_name,start[,length]) FROM table_names
 | start       | 必需。规定开始位置（起始值是 1）。                          |
 | length      | 可选。要返回的字符数。如果省略，则 MID() 函数返回剩余文本。 |
 
-#### LEN
+### LEN
 
 LEN 函数返回文本字段中值的长度。
 
@@ -805,7 +803,7 @@ LEN 函数返回文本字段中值的长度。
 SELECT LEN(column_name) FROM table_name
 ```
 
-#### ROUND
+### ROUND
 
 ROUND 函数用于把数值字段舍入为指定的小数位数。
 
@@ -818,7 +816,7 @@ SELECT ROUND(column_name,decimals) FROM table_name
 | column_name | 必需。要舍入的字段。         |
 | decimals    | 必需。规定要返回的小数位数。 |
 
-#### NOW
+### NOW
 
 NOW 函数返回当前的日期和时间。
 
@@ -828,7 +826,7 @@ NOW 函数返回当前的日期和时间。
 SELECT NOW() FROM table_name
 ```
 
-#### FORMAT
+### FORMAT
 
 FORMAT 函数用于对字段的显示进行格式化。
 
