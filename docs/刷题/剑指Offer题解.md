@@ -773,3 +773,100 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 18. 删除链表的节点
+
+给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+
+返回删除后的链表的头节点。
+
+>   **示例 1:**
+>
+>   ```
+>   输入: head = [4,5,1,9], val = 5
+>   输出: [4,1,9]
+>   解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+>   ```
+>
+>   **示例 2:**
+>
+>   ```
+>   输入: head = [4,5,1,9], val = 1
+>   输出: [4,5,9]
+>   解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+>   ```
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode deleteNode(ListNode head, int val) {
+        if (head == null || head.next == null) {
+            return null;
+        }
+        if (head.val == val) {
+            return head.next;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null) {
+            if (fast.val == val) {
+                slow.next = fast.next;
+                break;
+            }
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return head;
+    }
+}
+```
+
+## 剑指 Offer 19. 正则表达式匹配
+
+请实现一个函数用来匹配包括`'.'`和`'*'`的正则表达式。模式中的字符``'.'``表示任意一个字符，而``'*'``表示它前面的字符可以出现任意次（包含0次）。 在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串`"aaa"`与模式`"a.a"`和`"ab*ac*a"`匹配，但是与`"aa.a"`和`"ab*a"`均不匹配
+
+```java
+class Solution {
+    public boolean isMatch(String A, String B) {
+        int n = A.length();
+        int m = B.length();
+        boolean[][] f = new boolean[n + 1][m + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                //分成空正则和非空正则两种
+                if (j == 0) {
+                    f[i][j] = i == 0;
+                } else {
+                    //非空正则分为两种情况 * 和 非*
+                    if (B.charAt(j - 1) != '*') {
+                        if (i > 0 && (A.charAt(i - 1) == B.charAt(j - 1) 
+                                      || B.charAt(j - 1) == '.')) {
+                            f[i][j] = f[i - 1][j - 1];
+                        }
+                    } else {
+                        //碰到 * 了，分为看和不看两种情况
+                        //不看
+                        if (j >= 2) {
+                            f[i][j] |= f[i][j - 2];
+                        }
+                        //看
+                        if (i >= 1 && j >= 2 && (A.charAt(i - 1) == B.charAt(j - 2) 
+                                                 || B.charAt(j - 2) == '.')) {
+                            f[i][j] |= f[i - 1][j];
+                        }
+                    }
+                }
+            }
+        }
+        return f[n][m];
+    }
+}
+```
+
