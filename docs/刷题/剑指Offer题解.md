@@ -915,3 +915,137 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数位于数组的前半部分，所有偶数位于数组的后半部分。
+
+>   示例：
+>
+>   输入：nums = [1,2,3,4]
+>
+>   输出：[1,3,2,4] 
+>
+>   注：[3,1,2,4] 也是正确的答案之一。
+>
+>
+>   提示：
+>
+>   1 <= nums.length <= 50000
+>   1 <= nums[i] <= 10000
+
+```java
+class Solution {
+    public int[] exchange(int[] nums) {
+        if(nums.length == 0 || nums == null) {
+            return nums;
+        }
+        int i = 0, j = nums.length-1;
+        while(i != j){
+            // 找到左边第一个偶数
+            while(nums[i] % 2 != 0 && i < j ){
+                i++;
+            }
+            // 找到右边第一个奇数
+            while(nums[j] % 2 == 0 && i < j ){
+                j--;
+            }
+            if(i < j){
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+        return nums;
+    }
+}
+```
+
+## 剑指 Offer 22. 链表中倒数第k个节点
+
+输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。
+
+>   示例：
+>
+>   给定一个链表: 1->2->3->4->5, 和 k = 2.
+>
+>   返回链表 4->5.
+>
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        if (head == null || k == 0) {
+            return null;
+        }
+         //快慢指针
+        ListNode slow = head;
+        ListNode fast = head;
+        //快指针指向慢指针前k个位置
+        for(int i = 0; i < k; i++){
+            if(fast == null){
+                return null;
+            }
+            fast = fast.next;
+        }
+        //当快指针遍历完成后，返回慢指针位置
+        while(fast != null){
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+}
+```
+
+## 剑指 Offer 24. 反转链表
+
+定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+
+>   示例:
+>
+>   输入: 1->2->3->4->5->NULL
+>
+>   输出: 5->4->3->2->1->NULL
+>
+>
+>   限制：
+>
+>   0 <= 节点个数 <= 5000
+>
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode pre = null;
+        ListNode next = null;
+        //三个指针，pre、head、next
+        while(head != null){
+            next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+}
+```
+

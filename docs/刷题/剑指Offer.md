@@ -328,7 +328,7 @@ public class Solution {
                 list.add(array[i]);
             }
         }
-        //在保存偶数
+        //再保存偶数
         for(int i = 0; i < array.length; i++){
             if(array[i] % 2 == 0){
                 list.add(array[i]);
