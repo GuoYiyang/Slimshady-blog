@@ -90,7 +90,7 @@
 
 # 刷题
 
-[剑指Offer](刷题\剑指Offer.md) 
+[剑指Offer.md](刷题\剑指Offer.md) 
 
 [力扣](刷题/力扣.md) 
 
