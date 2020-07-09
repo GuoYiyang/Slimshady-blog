@@ -1049,3 +1049,337 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 25. 合并两个排序的链表
+
+输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+
+>   示例1：
+>
+>   输入：1->2->4, 1->3->4
+>
+>   输出：1->1->2->3->4->4
+>
+>   限制：
+>
+>   0 <= 链表长度 <= 1000
+>
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        //创建头节点
+        ListNode head = new ListNode(0);
+        ListNode newList = head;
+        while(true){
+            //当list1为null时，直接复制list2剩余元素
+            if(list1 == null){
+                while(list2 != null){
+                    newList.next = list2;
+                    newList = newList.next;
+                    list2 = list2.next;
+                }
+                return head.next;
+            }
+            //当list2为null时，直接复制list1剩余元素
+            if(list2 == null){
+                while(list1 != null){
+                    newList.next = list1;
+                    newList = newList.next;
+                    list1 = list1.next;
+                }
+                return head.next;
+            }
+            //先添加小的
+            if(list1.val <= list2.val){
+                newList.next = list1;
+                newList = newList.next;
+                list1 = list1.next;
+            }else{
+                newList.next = list2;
+                newList = newList.next;
+                list2 = list2.next;
+            }
+        }
+    }
+}
+```
+
+## 剑指 Offer 26. 树的子结构
+
+输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+
+B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+
+例如:
+
+给定的树 A:
+
+```
+     3
+    / \
+   4   5
+  / \
+ 1   2
+```
+
+给定的树 B：
+
+```
+   4 
+  /
+ 1
+```
+
+返回 true，因为 B 与 A 的一个子树拥有相同的结构和节点值。
+
+>   示例 1：
+>
+>   输入：A = [1,2,3], B = [3,1]
+>
+>   输出：false
+>
+>   示例 2：
+>
+>   输入：A = [3,4,5,1,2], B = [4,1]
+>
+>   输出：true
+>
+>   限制：
+>
+>   0 <= 节点个数 <= 10000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        // 如果A或B都走完了还没找到，那应该就是找不到了
+        if(A == null || B == null) return false;
+        //看看当前节点成不？不成就看看左边，不然看看右边？
+        return subTree(A, B) 
+            || isSubStructure(A.left, B) 
+            || isSubStructure(A.right, B);
+    }
+
+    boolean subTree(TreeNode a, TreeNode b){
+        // b这边都看完了，还没挑出不同？那就是了吧！
+        if(b == null) return true;
+        // b这边还没看完了，a那边就null了？
+        else if(a == null) return false;
+        return a.val == b.val 
+            && subTree(a.left, b.left) 
+            && subTree(a.right, b.right);
+    }
+}
+```
+
+## 剑指 Offer 27. 二叉树的镜像
+
+请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+
+例如输入：
+
+     	  4
+        /   \
+      2     7
+     / \   / \
+    1   3 6   9
+镜像输出：
+
+    	 4
+        /   \
+      7     2
+     / \   / \
+    9   6 3   1
+>   示例 1：
+>
+>   输入：root = [4,2,7,1,3,6,9]
+>
+>   输出：[4,7,2,9,6,3,1]
+>
+>
+>   限制：
+>
+>   0 <= 节点个数 <= 1000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode mirrorTree(TreeNode root) {
+        if(root == null){
+            return null;
+        }
+        
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        
+        mirrorTree(root.left);
+        mirrorTree(root.right);
+
+        return root;
+    }
+}
+```
+
+## 剑指 Offer 28. 对称的二叉树
+
+请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+    	1
+       / \
+      2   2
+     / \ / \
+    3  4 4  3
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+    	1
+       / \
+      2   2
+       \   \
+       3    3
+>   示例 1：
+>
+>   输入：root = [1,2,2,3,4,4,3]
+>
+>   输出：true
+>
+>   示例 2：
+>
+>   输入：root = [1,2,2,null,3,null,3]
+>
+>   输出：false
+>
+>
+>   限制：
+>
+>   0 <= 节点个数 <= 1000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null) {
+            return true;
+        }
+        return isMirrorBTree(root.left, root.right);
+    }
+    
+    public boolean isMirrorBTree(TreeNode root1, TreeNode root2) {
+        if(null == root1 && null == root2) {
+            return true;
+        } else if(null == root1 || null == root2) {
+            return false;
+        }
+        if(root1.val != root2.val) {
+            return false;
+        }
+        //此处注意相反比较
+        return isMirrorBTree(root1.left, root2.right)
+            && isMirrorBTree(root1.right, root2.left);
+    }
+}
+```
+
+## 剑指 Offer 29. 顺时针打印矩阵
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+>   示例 1：
+>
+>   输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+>
+>   输出：[1,2,3,6,9,8,7,4,5]
+>
+>   示例 2：
+>
+>   输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+>
+>   输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+>
+>
+>   限制：
+>
+>   0 <= matrix.length <= 100
+>
+>   0 <= matrix[i].length <= 100
+
+```java
+class Solution {
+    public int[] spiralOrder(int[][] matrix) {
+        if(matrix.length == 0 || matrix[0].length == 0){
+            return new int[0];
+        }
+        //定义四个边界
+        int low = 0;
+        int high = matrix.length -1;
+        int left = 0;
+        int right = matrix[0].length -1;
+
+        int len = (high + 1) * (right + 1);
+        int[] result = new int[len];
+        int p = 0;
+        
+        while(low <= high && left <= right){
+            for(int i = left; i <= right; i++){
+                result[p++] = matrix[low][i];
+            }
+            for(int i = low+1; i <= high; i++){
+                result[p++] = matrix[i][right];
+            }
+            if(low < high){
+               for(int i = right-1; i >= left; i--){
+                    result[p++] = matrix[high][i];
+                } 
+            }
+            if(left < right){
+                for(int i = high-1; i >= low+1; i--){
+                    result[p++] = matrix[i][left];
+                }
+            }
+            low++;
+            high--;
+            left++;
+            right--;
+        }
+        return result;
+    }
+}
+```
+
