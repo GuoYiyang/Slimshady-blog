@@ -1383,3 +1383,125 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 30. 包含min函数的栈
+
+定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+
+>   示例:
+>
+>   ```java
+>   MinStack minStack = new MinStack();
+>   minStack.push(-2);
+>   minStack.push(0);
+>   minStack.push(-3);
+>   minStack.min();   --> 返回 -3.
+>   minStack.pop();
+>   minStack.top();      --> 返回 0.
+>   minStack.min();   --> 返回 -2.
+>   ```
+>
+>
+>   提示：
+>
+>   各函数的调用总次数不超过 20000 次
+>
+
+```java
+class MinStack {
+    
+    /** initialize your data structure here. */
+    Stack<Integer> stackAll;
+    Stack<Integer> stackMin;
+    
+    public MinStack() {
+        stackAll = new Stack<>();
+        stackMin = new Stack<>();
+    }
+    
+    public void push(int x) {
+        if (stackMin.isEmpty()) {
+            stackMin.push(x);
+        } else {
+            if (x < stackMin.peek()) {
+                stackMin.push(x);
+            } else {
+                stackMin.push(stackMin.peek());
+            }
+        }
+        stackAll.push(x);
+    }
+    
+    public void pop() {
+        stackAll.pop();
+        stackMin.pop();
+    }
+    
+    public int top() {
+        return stackAll.peek();
+    }
+    
+    public int min() {
+        return stackMin.peek();
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.min();
+ */
+```
+
+## 剑指 Offer 31. 栈的压入、弹出序列
+
+输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+
+>   示例 1：
+>
+>   输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+>
+>   输出：true
+>
+>   解释：我们可以按以下顺序执行：
+>
+>   push(1), push(2), push(3), push(4), pop() -> 4,
+>
+>   push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+>
+>   示例 2：
+>
+>   输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+>
+>   输出：false
+>
+>   解释：1 不能在 2 之前弹出。
+>
+>
+>   提示：
+>
+>   0 <= pushed.length == popped.length <= 1000
+>
+>   0 <= pushed[i], popped[i] < 1000
+>
+>   pushed 是 popped 的排列。
+
+```java
+class Solution {
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        Stack<Integer> stack = new Stack<>();
+        int count = 0;
+        for(int i = 0; i < pushed.length; i++){
+            stack.push(pushed[i]);
+            while(!stack.isEmpty() && stack.peek() == popped[count]){
+                stack.pop();
+                count++;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+```
+
