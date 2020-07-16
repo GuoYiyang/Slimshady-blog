@@ -1505,3 +1505,354 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 32 - I. 从上到下打印二叉树
+
+从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+>   例如:
+>
+>   给定二叉树: [3,9,20,null,null,15,7],
+>
+>       	3
+>          / \
+>         9  20
+>           /  \
+>          15   7
+>
+>   返回：
+>
+>   [3,9,20,15,7]
+>
+>
+>   提示：
+>
+>   节点总数 <= 1000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int[] levelOrder(TreeNode root) {
+        if (root == null) {
+            return new int[0];
+        }
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        List<Integer> res = new ArrayList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            res.add(node.val);
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+        }
+        int[] result = new int[res.size()];
+        for (int i = 0; i < res.size(); i++) {
+            result[i] = res.get(i);
+        }
+        return result;
+    }
+}
+```
+
+## 剑指 Offer 32 - II. 从上到下打印二叉树 II
+
+从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+
+>   例如:
+>
+>   给定二叉树: [3,9,20,null,null,15,7],
+>
+>       	3
+>          / \
+>         9  20
+>           /  \
+>          15   7
+>   返回其层次遍历结果：
+>
+>   ```
+>   [
+>     [3],
+>     [9,20],
+>     [15,7]
+>   ]
+>   ```
+>
+>
+>   提示：
+>
+>   节点总数 <= 1000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null) 
+            return new LinkedList<>();
+        List<List<Integer>> treeList = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int count = 0;
+        while(!queue.isEmpty()){
+            //记录当前这一层所有的节点数
+            count = queue.size();
+            List<Integer> tempList = new LinkedList<>();
+            while(count > 0){
+                TreeNode temp = queue.poll();
+                tempList.add(temp.val);
+                if(temp.left != null) 
+                    queue.offer(temp.left);
+                if(temp.right != null) 
+                    queue.offer(temp.right);
+                count--;
+            }
+            treeList.add(tempList);
+        }  
+        return treeList;
+    }
+}
+```
+
+## 剑指 Offer 32 - III. 从上到下打印二叉树 III
+
+请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+
+>   例如:
+>
+>   给定二叉树: [3,9,20,null,null,15,7],
+>
+>       	3
+>          / \
+>         9  20
+>           /  \
+>          15   7
+>   返回其层次遍历结果：
+>
+>   ```
+>   [
+>     [3],
+>     [20,9],
+>     [15,7]
+>   ]
+>   ```
+>
+>
+>   提示：
+>
+>   节点总数 <= 1000
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<TreeNode> d = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if(root != null) d.add(root);
+        while(!d.isEmpty()){
+            LinkedList<Integer> tmp = new LinkedList<>();
+            for(int i = d.size();i > 0;i--){
+                TreeNode node = d.poll();
+                tmp.addLast(node.val);
+                if(node.left != null) d.addLast(node.left);
+                if(node.right != null) d.add(node.right);
+            }
+            if(res.size() % 2 == 1) Collections.reverse(tmp);
+            res.add(tmp);
+        }
+        return res;
+    }
+}
+```
+
+## 剑指 Offer 33. 二叉搜索树的后序遍历序列
+
+输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。
+
+参考以下这颗二叉搜索树：
+
+         5
+        / \
+       2   6
+      / \
+     1   3
+>
+>   示例 1：
+>
+>   输入: [1,6,3,2,5]
+>
+>   输出: false
+>
+>   示例 2：
+>
+>   输入: [1,3,2,6,5]
+>
+>   输出: true
+>
+>
+>   提示：
+>
+>   数组长度 <= 1000
+>
+
+```java
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+        int len = postorder.length;
+        if(len == 0) return true;
+        //根节点
+        int root = postorder[len - 1];
+        int i;
+        //找到第一个大于根节点的下标i;
+        for(i = 0; i < len - 1; i++){
+            if(postorder[i] > root) break;
+        }
+        //i右边所有节点都应该大于根节点，若有小于，直接返回false;
+        for(int j = i; j < len - 1; j++){
+            if(postorder[j] < root){
+                return false;
+            }
+        }
+        //递归判断i左边和右边是否满足后序遍历序列
+        boolean left = true, right = true;
+        if(i > 0){
+            left = verifyPostorder(Arrays.copyOfRange(postorder, 0, i));
+        }
+        if(i < len - 1){
+           right = verifyPostorder(Arrays.copyOfRange(postorder, i, len-1)); 
+        }
+        return left && right;  
+    }
+}
+```
+
+## 剑指 Offer 34. 二叉树中和为某一值的路径
+
+输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径
+
+>   示例:
+>
+>   给定如下二叉树，以及目标和 sum = 22，
+>
+>                 5
+>                / \
+>               4   8
+>              /   / \
+>             11  13  4
+>            /  \    / \
+>           7    2  5   1
+>   返回:
+>
+>   ```
+>   [
+>      [5,4,11,2],
+>      [5,8,4,5]
+>   ]
+>   ```
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    List<Integer> list = new ArrayList<>();
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        if(root == null) 
+            return res;
+        dfs(root, sum);
+        return res;
+    }
+
+    private void dfs(TreeNode node, int target){
+        if(node == null)
+            return;
+        list.add(node.val);
+        target -= node.val;
+        if(target == 0 && node.left == null && node.right == null){
+            res.add(new ArrayList<>(list)); //注意浅拷贝
+        }
+        dfs(node.left,target);
+        dfs(node.right,target);
+        list.remove(list.size() - 1);
+    }
+}
+```
+
+## 剑指 Offer 35. 复杂链表的复制
+
+请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+
+>   示例 1：
+>
+>   输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+>
+>   输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+>
+>   示例 2：
+>
+>   输入：head = [[1,1],[2,1]]
+>
+>   输出：[[1,1],[2,1]]
+>
+>   示例 3：
+>
+>   输入：head = [[3,null],[3,0],[3,null]]
+>
+>   输出：[[3,null],[3,0],[3,null]]
+>
+>   示例 4：
+>
+>   输入：head = []
+>
+>   输出：[]
+>
+>   解释：给定的链表为空（空指针），因此返回 null。
+>
+>
+>   提示：
+>
+>   -10000 <= Node.val <= 10000
+>
+>   Node.random 为空（null）或指向链表中的节点。
+>
+>   节点数目不超过 1000 。
+
+```java
+
+```
+

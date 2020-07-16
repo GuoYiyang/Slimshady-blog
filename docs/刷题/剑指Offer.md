@@ -731,7 +731,7 @@ import java.util.Arrays;
 public class Solution {
     public boolean VerifySquenceOfBST(int [] sequence) {
         int len = sequence.length;
-        if(len==0) return false;
+        if(len == 0) return false;
         //根节点
         int root = sequence[len - 1];
         int i;
