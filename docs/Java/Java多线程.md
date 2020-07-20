@@ -972,25 +972,25 @@ BlockingQueue 接口是 Queue 的子接口，它的主要用途并不是作为�
 
 **ThreadPoolExecutor 3 个最重要的参数：**
 
-1.  corePoolSize ：核心线程数，线程数定义了最小可以同时运行的线程数量。
-2.  maximumPoolSize ：线程池中允许存在的工作线程的最大数量
-3.  workQueue：当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
+*   corePoolSize ：核心线程数，线程数定义了最小可以同时运行的线程数量。
+*   maximumPoolSize ：线程池中允许存在的工作线程的最大数量
+*   workQueue：当新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到的话，任务就会被存放在队列中。
 
 其他常见参数:
 
-1.  keepAliveTime：线程池中的线程数量大于 corePoolSize 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 keepAliveTime才会被回收销毁；
-2.  unit ：keepAliveTime 参数的时间单位。
-3.  threadFactory：为线程池提供创建新线程的线程工厂
-4.  handler ：线程池任务队列超过 maxinumPoolSize 之后的拒绝策略
+*   keepAliveTime：线程池中的线程数量大于 corePoolSize 的时候，如果这时没有新的任务提交，核心线程外的线程不会立即销毁，而是会等待，直到等待的时间超过了 keepAliveTime才会被回收销毁；
+*   unit ：keepAliveTime 参数的时间单位。
+*   threadFactory：为线程池提供创建新线程的线程工厂
+*   handler ：线程池任务队列超过 maxinumPoolSize 之后的拒绝策略
 
 **线程池有什么优点？**
 
--   降低资源消耗：重用存在的线程，减少对象创建销毁的开销。
--   提高响应速度：可有效的控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞。当任务到达时，任务可以不需要的等到线程创建就能立即执行。
+1.  降低资源消耗：重用存在的线程，减少对象创建销毁的开销。
+2.  提高响应速度：可有效的控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞。当任务到达时，任务可以不需要的等到线程创建就能立即执行。
 
--   提高线程的可管理性：线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
+3.  提高线程的可管理性：线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。
 
--   附加功能：提供定时执行、定期执行、单线程、并发数控制等功能。
+4.  附加功能：提供定时执行、定期执行、单线程、并发数控制等功能。
 
 
 综上所述使用线程池框架 Executor 能更好的管理线程、提供系统资源使用率。
@@ -1007,10 +1007,10 @@ BlockingQueue 接口是 Queue 的子接口，它的主要用途并不是作为�
 
 Executors 各个方法的弊端：
 
-1.  newFixedThreadPool 和 newSingleThreadExecutor:
+*   newFixedThreadPool 和 newSingleThreadExecutor:
     主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至 OOM。
 
-2.  newCachedThreadPool 和 newScheduledThreadPool:
+*   newCachedThreadPool 和 newScheduledThreadPool:
     主要问题是线程数最大数是 Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至 OOM。
 
 ThreaPoolExecutor创建线程池方式只有一种，就是走它的构造函数，参数自己指定
@@ -1025,3 +1025,4 @@ ThreadPoolExecutor() 是最原始的线程池创建，也是阿里巴巴 Java �
 -   ThreadPoolExecutor.CallerRunsPolicy：调用执行自己的线程运行任务。您不会任务请求。但是这种策略会降低对于新任务提交速度，影响程序的整体性能。另外，这个策略喜欢增加队列容量。如果您的应用程序可以承受此延迟并且你不能任务丢弃任何一个任务请求的话，你可以选择这个策略。
 -   ThreadPoolExecutor.DiscardPolicy：不处理新任务，直接丢弃掉。
 -   ThreadPoolExecutor.DiscardOldestPolicy： 此策略将丢弃最早的未处理的任务请求。
+

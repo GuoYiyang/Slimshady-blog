@@ -236,13 +236,12 @@ public boolean add(E e) {
 | 调用put()向map中添加元素           | 调用add()方法向Set中添加元素        |
 | HashMap使用键(Key)计算hashcode     | hashSet使用成员对象来计算hashcode值 |
 | 较快，因为它是使用唯一的键获取对象 | HashSet较HashMap来说比较慢          |
-|                                    |                                     |
 
 ### Queue
 
 #### 阻塞队列BlockingQueue
 
-Java.util.concurrent.BlockingQueue是一个队列，在进行检索或移除一个元素的时候，它会等待队列变为非空；当在添加一个元素时，它会等待队列中的可用空间。BlockingQueue接口是Java集合框架的一部分，主要用于实现==生产者-消费者模式==。我们不需要担心等待生产者有可用的空间，或消费者有可用的对象，因为它都在BlockingQueue的实现类中被处理了。Java提供了集中BlockingQueue的实现，比如ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue,、SynchronousQueue等。
+Java.util.concurrent.BlockingQueue是一个队列，在进行检索或移除一个元素的时候，它会等待队列变为非空；当在添加一个元素时，它会等待队列中的可用空间。BlockingQueue接口是Java集合框架的一部分，主要用于实现==生产者-消费者模式==。我们不需要担心等待生产者有可用的空间，或消费者有可用的对象，因为它都在BlockingQueue的实现类中被处理了。Java提供了集中BlockingQueue的实现，比如ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue、SynchronousQueue等。
 
 #### poll()和 remove()区别
 
@@ -262,7 +261,7 @@ put元素时，利用key的hashCode值计算出当前对象的元素在数组中
 
 ### put方法的具体流程
 
-put的时候，首先计算 key的hash值，这里调用了 hash方法，hash方法实际是让key.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：==高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞==。按照函数注释，因为bucket数组大小是2的幂，计算下标index = (table.length - 1) & hash，如果不做 hash 处理，相当于散列生效的只有几个低 bit 位，为了减少散列的碰撞，设计者综合考虑了之后，使用高16bit和低16bit异或来简单处理减少碰撞，而且JDK8中用了复杂度 O（logn）的树结构来提升碰撞下的性能。
+put的时候，首先计算 key的hash值，这里调用了 hash方法，hash方法实际是让key.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：==高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞==。按照函数注释，因为bucket数组大小是2的幂，计算下标index = (table.length - 1) & hash，如果不做 hash 处理，相当于散列生效的只有几个低 bit 位，为了减少散列的碰撞，设计者综合考虑了之后，使用高16bit和低16bit异或来简单处理减少碰撞，而且JDK8中用了复杂度 O（logn）的红黑树结构来提升碰撞下的性能。
 
 ### HashMap的扩容操作
 

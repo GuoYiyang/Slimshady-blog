@@ -1046,6 +1046,16 @@ class Solution {
         }
         return pre;
     }
+    //递归解法
+    public ListNode reverseList2 (ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode last = reverseList2(head.next);
+        head.next.next = head;
+        head.next = null;
+        return last;
+    }
 }
 ```
 
@@ -1674,7 +1684,7 @@ class Solution {
  */
 class Solution {
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<TreeNode> d = new LinkedList<>();
+        Deque<TreeNode> d = new LinkedList<>();
         List<List<Integer>> res = new ArrayList<>();
         if(root != null) d.add(root);
         while(!d.isEmpty()){
@@ -1853,6 +1863,39 @@ class Solution {
 >   节点数目不超过 1000 。
 
 ```java
-
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+class Solution {
+ public Node copyRandomList(Node head) {
+        Map<Node, Node> map = new HashMap();
+        if(head == null) return null;
+        Node p = head;
+        //哈希表存储所有的新旧节点对儿
+        while(p != null){
+            map.put(p, new Node(p.val));
+            p = p.next;
+        }
+        p = head;
+        while(p != null){
+            //新节点的next就是旧节点next对应的新节点
+            map.get(p).next = map.get(p.next);
+            //新节点的random就是旧节点random对应的新节点
+            map.get(p).random = map.get(p.random);
+            p = p.next;
+        }
+        return map.get(head);
+    }
+}
 ```
 
