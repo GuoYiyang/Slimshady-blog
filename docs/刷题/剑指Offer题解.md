@@ -1829,17 +1829,23 @@ class Solution {
 
 >   示例 1：
 >
+>   ![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e1.png)
+>
 >   输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
 >
 >   输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
 >
 >   示例 2：
 >
+>   ![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e2.png)
+>
 >   输入：head = [[1,1],[2,1]]
 >
 >   输出：[[1,1],[2,1]]
 >
 >   示例 3：
+>
+>   ![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e3.png)
 >
 >   输入：head = [[3,null],[3,0],[3,null]]
 >
@@ -1895,6 +1901,473 @@ class Solution {
             p = p.next;
         }
         return map.get(head);
+    }
+}
+```
+
+## 剑指 Offer 36. 二叉搜索树与双向链表
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的循环双向链表。要求不能创建任何新的节点，只能调整树中节点指针的指向。
+
+为了让您更好地理解问题，以下面的二叉搜索树为例：
+
+<img src="https://assets.leetcode.com/uploads/2018/10/12/bstdlloriginalbst.png" alt="img" style="zoom:50%;" />
+
+我们希望将这个二叉搜索树转化为双向循环链表。链表中的每个节点都有一个前驱和后继指针。对于双向循环链表，第一个节点的前驱是最后一个节点，最后一个节点的后继是第一个节点。
+
+下图展示了上面的二叉搜索树转化成的链表。“head” 表示指向链表中有最小元素的节点。
+
+<img src="https://assets.leetcode.com/uploads/2018/10/12/bstdllreturndll.png" alt="img" style="zoom:50%;" />
+
+特别地，我们希望可以就地完成转换操作。当转化完成以后，树中节点的左指针需要指向前驱，树中节点的右指针需要指向后继。还需要返回链表中的第一个节点的指针。
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node() {}
+    public Node(int _val) {
+        val = _val;
+    }
+    public Node(int _val,Node _left,Node _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+    Node pre = null;
+    public Node treeToDoublyList(Node root) {
+        if(root == null) {
+            return null;
+        }
+        Node p = root, q = root;
+        // 寻找最左和最右节点
+        while(p.left != null) {
+            p = p.left;
+        }
+        while(q.right != null) {
+            q = q.right;
+        }
+        // 中序遍历
+        inorder(root);
+        // 进行头尾相接
+        p.left = q;
+        q.right = p;
+        return p;
+    }
+    // 形成的是一个非循环的双向链表
+    public void inorder(Node curr){
+        if(curr == null) {
+            return;
+        }
+        inorder(curr.left);
+        // 1.将当前被访问节点curr的左孩子置为前驱pre（中序）
+        curr.left = this.pre;
+        // 2.若前驱pre不为空，则前驱的右孩子置为当前被访问节点curr
+        if(this.pre != null) {
+           this.pre.right = curr; 
+        }
+        // 3.将前驱pre指向当前节点curr，即访问完毕
+        pre = curr;
+        inorder(curr.right);
+    }
+}
+```
+
+## 剑指 Offer 37. 序列化二叉树
+
+请实现两个函数，分别用来序列化和反序列化二叉树。
+
+>   示例: 
+>
+>   你可以将以下二叉树：
+>
+>       	1
+>          / \
+>         2   3
+>            / \
+>           4   5
+>   序列化为 "[1,2,3,null,null,4,5]"
+>
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+        if(root == null){
+            return "";
+        }
+        return helpSerialize(root, new StringBuilder()).toString();
+    }
+
+    StringBuilder helpSerialize(TreeNode root, StringBuilder s) {
+        if (root == null) return s;
+        s.append(root.val).append("!");
+        if (root.left != null) {
+            helpSerialize(root.left, s);
+        } else {
+            s.append("#!"); // 为null的话直接添加即可
+        }
+        if (root.right != null) {
+            helpSerialize(root.right, s);
+        } else {
+            s.append("#!");
+        }
+        return s;
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String str) {
+        if (str == null || str.length() == 0) return null;
+        String[] split = str.split("!");
+        return helpDeserialize(split);
+    }
+
+    int index = 0;
+    TreeNode helpDeserialize(String[] strings) {
+        if (strings[index].equals("#")) {
+            index++;// 数据前进
+            return null;
+        }
+        // 当前值作为节点已经被用
+        TreeNode root = new TreeNode(Integer.valueOf(strings[index]));
+        index++; // index++到达下一个需要反序列化的值
+        root.left = helpDeserialize(strings);
+        root.right = helpDeserialize(strings);
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec = new Codec();
+// codec.deserialize(codec.serialize(root));
+```
+
+## 剑指 Offer 38. 字符串的全排列
+
+输入一个字符串，打印出该字符串中字符的所有排列。
+
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+
+>   示例:
+>
+>   输入：s = "abc"
+>
+>   输出：["abc","acb","bac","bca","cab","cba"]
+
+```java
+class Solution {
+    // 使用set去重
+    Set<String> res = new HashSet<>();
+    public String[] permutation(String s) {
+        if(s == null) {
+            return new String[]{};
+        }
+        // 判断每一个字符是使用过
+        boolean[] visited = new boolean[s.length()];
+        dfs(s, "", visited);    //看作剩下的字符有多少情况
+        String[] result = new String[res.size()];
+        return res.toArray(result);
+    }
+    // s: 原字符串
+    // letter：当前拥有的字符串
+    private void dfs(String s, String letter, boolean[] visited) {
+        // 长度一致，退出递归
+        if(s.length() == letter.length()){
+            res.add(letter);
+            return; 
+        }
+        for(int i = 0; i < s.length(); i++){
+            // 跳过已被使用的字符串
+            if(visited[i]) {
+                continue;
+            }
+            char c = s.charAt(i);
+            visited[i] = true;
+            dfs(s, letter + c, visited);
+            visited[i] = false;
+        }
+    }
+}
+```
+
+## 剑指 Offer 39. 数组中出现次数超过一半的数字
+
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+
+你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+>   示例 1:
+>
+>   输入: [1, 2, 3, 2, 2, 2, 5, 4, 2]
+>
+>   输出: 2
+
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        // 初始化为数组的第一个元素，接下来用于记录上一次访问的值
+        int target = nums[0];
+        // 用于记录出现次数
+		int count = 1;
+		for(int i = 1; i < nums.length; i++) {
+			if(target == nums[i]) {
+				count++;
+			}else {
+				count--;
+			}
+			if(count == 0) {
+                // 当count=0时，更换target的值为当前访问的数组元素的值，次数设为1
+				target = nums[i];
+				count = 1;
+			}
+		}
+		return target;
+    }
+}
+```
+
+## 剑指 Offer 40. 最小的k个数
+
+输入整数数组 arr ，找出其中最小的 k 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+
+>   示例 1：
+>
+>   输入：arr = [3,2,1], k = 2
+>
+>   输出：[1,2] 或者 [2,1]
+>
+>   示例 2：
+>
+>   输入：arr = [0,1,2,1], k = 1
+>
+>   输出：[0]
+
+**方法一：堆**
+
+```java
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (k == 0) {
+            return new int[0];
+        }
+        // 使用一个最大堆（大顶堆）
+        // Java 的 PriorityQueue 默认是小顶堆，添加 comparator 参数使其变成最大堆
+        Queue<Integer> heap = new PriorityQueue<>(k, (i1, i2) -> Integer.compare(i2, i1));
+        for (int e : arr) {
+            // 当前数字小于堆顶元素才会入堆
+            if (heap.isEmpty() || heap.size() < k || e < heap.peek()) {
+                heap.offer(e);
+            }
+            if (heap.size() > k) {
+                heap.poll(); // 删除堆顶最大元素
+            }
+        }
+        // 将堆中的元素存入数组
+        int[] res = new int[heap.size()];
+        int j = 0;
+        for (int e : heap) {
+            res[j++] = e;
+        }
+        return res;
+    }
+}
+```
+
+方法二：快排选择
+
+```java
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (k == 0) {
+            return new int[0];
+        } else if (arr.length <= k) {
+            return arr;
+        }
+
+        // 原地不断划分数组
+        partitionArray(arr, 0, arr.length - 1, k);
+
+        // 数组的前 k 个数此时就是最小的 k 个数，将其存入结果
+        int[] res = new int[k];
+        for (int i = 0; i < k; i++) {
+            res[i] = arr[i];
+        }
+        return res;
+    }
+
+    void partitionArray(int[] arr, int lo, int hi, int k) {
+        // 做一次 partition 操作
+        int m = partition(arr, lo, hi);
+        // 此时数组前 m 个数，就是最小的 m 个数
+        if (k == m) {
+            // 正好找到最小的 k(m) 个数
+            return;
+        } else if (k < m) {
+            // 最小的 k 个数一定在前 m 个数中，递归划分
+            partitionArray(arr, lo, m-1, k);
+        } else {
+            // 在右侧数组中寻找最小的 k-m 个数
+            partitionArray(arr, m+1, hi, k);
+        }
+    }
+
+    // partition 函数和快速排序中相同，具体可参考快速排序相关的资料
+    int partition(int[] a, int lo, int hi) {
+        int i = lo;
+        int j = hi + 1;
+        int v = a[lo];
+        while (true) { 
+            while (a[++i] < v) {
+                if (i == hi) {
+                    break;
+                }
+            }
+            while (a[--j] > v) {
+                if (j == lo) {
+                    break;
+                }
+            }
+
+            if (i >= j) {
+                break;
+            }
+            swap(a, i, j);
+        }
+        swap(a, lo, j);
+
+        // a[lo .. j-1] <= a[j] <= a[j+1 .. hi]
+        return j;
+    }
+
+    void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+}
+```
+
+## 剑指 Offer 41. 数据流中的中位数
+
+如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+
+例如，
+
+[2,3,4] 的中位数是 3
+
+[2,3] 的中位数是 (2 + 3) / 2 = 2.5
+
+设计一个支持以下两种操作的数据结构：
+
+*   void addNum(int num) - 从数据流中添加一个整数到数据结构中。
+*   double findMedian() - 返回目前所有元素的中位数。
+
+>   示例 1：
+>
+>   ```
+>   输入：
+>   ["MedianFinder","addNum","addNum","findMedian","addNum","findMedian"]
+>   [[],[1],[2],[],[3],[]]
+>   输出：
+>   [null,null,null,1.50000,null,2.00000]
+>   ```
+>
+>   示例 2：
+>
+>   ```
+>   输入：
+>   ["MedianFinder","addNum","findMedian","addNum","findMedian"]
+>   [[],[2],[],[3],[]]
+>   输出：
+>   [null,null,2.00000,null,2.50000]
+>   ```
+
+```java
+class MedianFinder {
+    private PriorityQueue<Integer> lowPart;
+    private PriorityQueue<Integer> highPart;
+    int size;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        lowPart = new PriorityQueue<Integer>((x, y) -> y - x);  //最大堆
+        highPart = new PriorityQueue<Integer>();
+        size = 0;
+    }
+    
+    public void addNum(int num) {
+        size++;
+        lowPart.offer(num);
+        highPart.offer(lowPart.poll());
+        if((size & 1) == 1){
+            lowPart.offer(highPart.poll());
+        }
+    }
+    
+    public double findMedian() {
+        if((size & 1) == 1){
+            return (double) lowPart.peek();
+        }else{
+            return (double) (lowPart.peek() + highPart.peek()) / 2;
+        }
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+```
+
+## 剑指 Offer 42. 连续子数组的最大和
+
+输入一个整型数组，数组里有正数也有负数。数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。
+
+要求时间复杂度为O(n)。
+
+>   示例1:
+>
+>   输入: nums = [-2,1,-3,4,-1,2,1,-5,4]
+>
+>   输出: 6
+>
+>   解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
+```java
+class Solution {
+    public int maxSubArray(int[] nums) {
+        // 用sum动态地记录当前节点最大连续子数组和
+        int sum = 0;
+        // 用max动态记录最大值
+        int max = nums[0];
+        for(int n : nums){
+            // 如果当前和小于0，只会连累后面的数组和，干脆放弃！
+            if(sum >= 0) {
+                sum += n;
+            } else {
+                sum = n; 
+            }
+            // 更新max
+            max = Math.max(max, sum);
+        }
+        return max;
     }
 }
 ```
