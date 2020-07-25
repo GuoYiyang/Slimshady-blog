@@ -2372,3 +2372,193 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 43. 1～n整数中1出现的次数
+
+输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。
+
+例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。
+
+>   示例 1：
+>
+>   输入：n = 12
+>
+>   输出：5
+>
+>   示例 2：
+>
+>   输入：n = 13
+>
+>   输出：6
+
+```java
+class Solution {
+        private int dfs(int n) {
+        if (n <= 0) {
+            return 0;
+        }
+        String numStr = String.valueOf(n);
+        int high = numStr.charAt(0) - '0';
+        int pow = (int) Math.pow(10, numStr.length() - 1);
+        int last = n - high * pow;
+        if (high == 1) {
+            // 最高位是1，如1234, 此时pow = 1000,那么结果由以下三部分构成：
+            // (1) dfs(pow - 1)代表[0,999]中1的个数;
+            // (2) dfs(last)代表234中1出现的个数;
+            // (3) last+1代表固定高位1有多少种情况。
+            return dfs(pow - 1) + dfs(last) + last + 1;
+        } else {
+            // 最高位不为1，如2234，那么结果也分成以下三部分构成：
+            // (1) pow代表固定高位1，有多少种情况;
+            // (2) high * dfs(pow - 1)代表999以内和1999以内低三位1出现的个数;
+            // (3) dfs(last)同上。
+            return pow + high * dfs(pow - 1) + dfs(last);
+        }
+    }
+    // 递归求解
+    public int countDigitOne(int n) {
+        return dfs(n);
+    }
+}
+```
+
+## 剑指 Offer 44. 数字序列中某一位的数字
+
+数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。
+
+请写一个函数，求任意第n位对应的数字。
+
+>   示例 1：
+>
+>   输入：n = 3
+>
+>   输出：3
+>
+>   示例 2：
+>
+>   输入：n = 11
+>
+>   输出：0
+
+```java
+class Solution {
+    public int findNthDigit(int n) {
+        if (n <= 9) return n;
+        double N = (double)n;
+        int len = 1;
+        double standard = Math.pow(10, len-1) * 9 * len;
+        while (N > standard) {
+            // System.out.println("N:" + N + "  standard:" + standard+"  len:"+len);
+            N = N - standard;
+            len++;
+            standard = Math.pow(10, len-1) * 9 * len;//这一步注意越界
+        }
+        //以上步骤判断下标为n的数字，属于哪个自然数
+        /*
+            1-9 9个数，占用9x1个下标
+            10-99 90个数，占用90x2个下标
+            100-999 900个数，占用900x3个下标
+            1000-9999 90000个数，占用9000x4个下标
+            ......
+        */
+        int Number = (int)N/len;//求出这是从100..000开始的第几个数
+        int mod = (int)N%len;//求出是数字中的第几位
+        // System.out.println("number:"+Number+" mod:"+mod);
+        if (mod == 0) {
+            return ((int)Math.pow(10, len-1)+Number-1)%10;
+        }
+        else {
+            int target = (int)Math.pow(10, len-1) + Number;
+            String s = String.valueOf(target);
+            char res = s.charAt(mod-1);
+            return res-'0';
+        }
+    }
+}
+```
+
+## 剑指 Offer 45. 把数组排成最小的数
+
+输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+
+>   示例 1:
+>
+>   输入: [10,2]
+>
+>   输出: "102"
+>
+>   示例 2:
+>
+>   输入: [3,30,34,5,9]
+>
+>   输出: "3033459"
+
+```java
+class Solution {
+    public String minNumber(int[] nums) {
+        List<String> strList = new ArrayList<>();
+        for (int num : nums) {
+            strList.add(String.valueOf(num));
+        }
+        strList.sort((s1, s2) -> (s1 + s2).compareTo(s2 + s1));
+        StringBuilder sb = new StringBuilder();
+        for (String str : strList) {
+            sb.append(str);
+        }
+        return sb.toString();
+    }
+}
+```
+
+## 剑指 Offer 46. 把数字翻译成字符串
+
+给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+
+>   示例 1:
+>
+>   输入: 12258
+>
+>   输出: 5
+>
+>   解释: 12258有5种不同的翻译，分别是"bccfi", "bwfi", "bczi", "mcfi"和"mzi"
+
+```java
+class Solution {
+    public int translateNum(int num) {
+        if (num <= 9) {
+            return 1;
+        }
+        //xyzcba，先取最后两位（个位和十位）即ba，
+        int ba = num % 100;
+        //如果 ba>=26 或者 ba<=9，此时只能分解成f(xyzcb);
+        if (ba <= 9 || ba >= 26) {
+            return translateNum(num / 10);
+        }
+        //否则能分解成f(xyzcb) + f(xyzc)
+        else  {
+            return translateNum(num / 10) + translateNum(num / 100);
+        }
+    }
+}
+```
+
+## 剑指 Offer 47. 礼物的最大价值
+
+在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+
+>   示例 1:
+>
+>   ```
+>   输入: 
+>   [
+>     [1,3,1],
+>     [1,5,1],
+>     [4,2,1]
+>   ]
+>   输出: 12
+>   解释: 路径 1→3→5→2→1 可以拿到最多价值的礼物
+>   ```
+
+```java
+
+```
+
