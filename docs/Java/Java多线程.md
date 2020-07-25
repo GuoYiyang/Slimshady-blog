@@ -731,7 +731,7 @@ volatile 常用于多线程环境下的单次操作(单次读或者单次写)。
 **volatile 变量和 atomic 变量有什么不同？**
 
 -   volatile 变量可以确保先行关系，即写操作会发生在后续的读操作之前, 但它并**不能保证原子性**。例如用 volatile 修饰 count 变量，那么 count++ 操作就不是原子性的。
--   而 AtomicInteger 类提供的 atomic 方法可以让这种操作具有原子性，如getAndIncrement()方法会原子性的进行增量操作把当前值加1，其它数据类型和引用变量也可以进行相似操作。
+-   而 AtomicInteger 类提供的 atomic 方法可以让这种操作**具有原子性**，如getAndIncrement()方法会原子性的进行增量操作把当前值加1，其它数据类型和引用变量也可以进行相似操作。
 
 **volatile 能使得一个非原子操作变成原子操作吗？**
 
