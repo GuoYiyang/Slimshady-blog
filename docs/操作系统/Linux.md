@@ -285,9 +285,9 @@ Linux系统是一个多用户多任务的分时操作系统，任何一个要使
 
 *   **网络通信命令：**
 
-    *   查看当前系统的网卡信息：ifconfig
-    *   查看与某台机器的连接情况：ping
-    *   查看当前系统的端口使用：netstat -an
+    *   查看当前系统的网卡信息：`ifconfig`
+    *   查看与某台机器的连接情况：`ping`
+    *   查看当前系统的端口使用：`netstat -an`
 
 *   **`shutdown`：** `shutdown -h now`： 指定现在立即关机；`shutdown +5 "System will shutdown after 5 minutes"`：指定5分钟后关机，同时送出警告信息给登入用户。
 
