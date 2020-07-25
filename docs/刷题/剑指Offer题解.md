@@ -2559,6 +2559,281 @@ class Solution {
 >   ```
 
 ```java
+class Solution {
+    public int maxValue(int[][] grid) {
+        if(grid == null) {
+            return 0;
+        }
+        // m行n列
+        int m = grid.length;
+        int n = grid[0].length;
+        // 创建一个长度+1的二维数组，从1开始遍历grid
+        int[][] f = new int[m+1][n+1];
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                // 
+                f[i+1][j+1] = Math.max(f[i][j+1], f[i+1][j]) + grid[i][j];
+            }
+        }
+        return f[m][n];
+    }
+}
+```
 
+## 剑指 Offer 48. 最长不含重复字符的子字符串
+
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+>   示例 1:
+>
+>   输入: "abcabcbb"
+>
+>   输出: 3 
+>
+>   解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+>
+>   示例 2:
+>
+>   输入: "bbbbb"
+>
+>   输出: 1
+>
+>   解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+>
+>   示例 3:
+>
+>   输入: "pwwkew"
+>
+>   输出: 3
+>
+>   解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+>
+>   请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length()==0) {
+            return 0;
+        }
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        //记录最大长度
+        int max = 0;
+        //记录最左开始字母下标
+        int left = 0;
+        for(int i = 0; i < s.length(); i ++){
+            if(map.containsKey(s.charAt(i))){
+                //更新最左开始字母下标
+                left = Math.max(left,map.get(s.charAt(i)) + 1);
+            }
+            map.put(s.charAt(i),i);
+            max = Math.max(max,i-left+1);
+        }
+        return max;
+    }
+}
+```
+
+## 剑指 Offer 49. 丑数
+
+我们把只包含质因子 2、3 和 5 的数称作丑数（Ugly Number）。求按从小到大的顺序的第 n 个丑数。
+
+>   示例:
+>
+>   输入: n = 10
+>
+>   输出: 12
+>
+>   解释: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 是前 10 个丑数。
+>
+>   说明:  
+>
+>   1 是丑数。
+>
+>   n 不超过1690。
+
+```java
+class Solution {
+    public int nthUglyNumber(int index) {
+        if (index == 0) {
+            return 0;
+        }
+        int[] res = new int[index];
+        res[0] = 1;
+        int pos2 = 0;// 2的对列
+        int pos3 = 0;// 3的对列
+        int pos5 = 0;// 5的对列
+        // 一个丑数*2/3/5还是丑数，从1开始
+        for (int i = 1; i < index; i++) {
+            //取三个数中最小的
+            res[i] = Math.min(Math.min(res[pos2] * 2, res[pos3] * 3), res[pos5] * 5);
+            //将相应数的指针+1
+            if (res[i]==res[pos2] * 2) {
+                pos2++;
+            }
+            if (res[i]==res[pos3] * 3) {
+                pos3++;
+            }
+            if (res[i]==res[pos5] * 5) {
+                pos5++;
+            }
+        }
+        return res[index-1];
+    }
+}
+```
+
+## 剑指 Offer 50. 第一个只出现一次的字符
+
+在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
+
+>   示例:
+>
+>   s = "abaccdeff"
+>
+>   返回 "b"
+>
+>   s = "" 
+>
+>   返回 " "
+
+```java
+class Solution {
+    public char firstUniqChar(String str) {
+        if(str == null || str.length() == 0){
+            return ' ';
+        }
+        //存储ASCII码
+        int[] count = new int[126];
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            count[c]++;
+        }
+        for(int i = 0; i < str.length(); i++){
+            char c = str.charAt(i);
+            if(count[c] == 1){
+                return c;
+            }
+        }
+        return ' ';
+    }
+}
+```
+
+## 剑指 Offer 51. 数组中的逆序对
+
+在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
+
+>   示例 1:
+>
+>   输入: [7,5,6,4]
+>
+>   输出: 5
+
+```java
+class Solution {
+    public int reversePairs(int[] nums) {
+        return merge(nums, 0, nums.length - 1);
+    }
+    int merge(int[] arr, int start, int end) {
+        if (start >= end) return 0;
+        int mid = start + (end - start) / 2;
+        int count = merge(arr, start, mid) + merge(arr, mid + 1, end);
+        int[] temp = new int[end - start + 1];
+        int i = start, j = mid + 1, k = 0;
+        while (i <= mid && j <= end) {
+            count += arr[i] <= arr[j] ? j - (mid + 1) : 0;
+            temp[k++] = arr[i] <= arr[j] ? arr[i++] : arr[j++];
+        }
+        while (i <= mid) {
+            count += j - (mid + 1);
+            temp[k++] = arr[i++];
+        }
+        while (j <= end)
+            temp[k++] = arr[j++];
+        System.arraycopy(temp, 0, arr, start, end - start + 1);
+        return count;
+    }
+}
+```
+
+## 剑指 Offer 52. 两个链表的第一个公共节点
+
+输入两个链表，找出它们的第一个公共节点。
+
+如下面的两个链表：
+
+<img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_statement.png" alt="img" style="zoom: 67%;" />
+
+在节点 c1 开始相交。
+
+>   示例 1：
+>
+>   <img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_example_1.png" alt="img" style="zoom:67%;" />
+>
+>   输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,0,1,8,4,5], skipA = 2, skipB = 3
+>
+>   输出：Reference of the node with value = 8
+>
+>   输入解释：相交节点的值为 8 （注意，如果两个列表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,0,1,8,4,5]。在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
+>
+>   示例 2：
+>
+>   <img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_example_2.png" alt="img" style="zoom:67%;" />
+>
+>   输入：intersectVal = 2, listA = [0,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+>
+>   输出：Reference of the node with value = 2
+>
+>   输入解释：相交节点的值为 2 （注意，如果两个列表相交则不能为 0）。从各自的表头开始算起，链表 A 为 [0,9,1,2,4]，链表 B 为 [3,2,4]。在 A 中，相交节点前有 3 个节点；在 B 中，相交节点前有 1 个节点。
+>
+>   示例 3：
+>
+>   <img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/160_example_3.png" alt="img" style="zoom:67%;" />
+>
+>   输入：intersectVal = 0, listA = [2,6,4], listB = [1,5], skipA = 3, skipB = 2
+>
+>   输出：null
+>
+>   输入解释：从各自的表头开始算起，链表 A 为 [2,6,4]，链表 B 为 [1,5]。由于这两个链表不相交，所以 intersectVal 必须为 0，而 skipA 和 skipB 可以是任意值。
+>
+>   解释：这两个链表不相交，因此返回 null。
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int lengthA = getLength(headA), lengthB = getLength(headB);
+        ListNode a = headA, b = headB;
+        if(lengthA > lengthB){
+            for(int i = 0; i < lengthA - lengthB; i++)
+                a = a.next;
+        } else {
+            for(int i = 0; i < lengthB - lengthA; i++)
+                b = b.next;
+        }
+        while(a != b){
+            a = a.next;
+            b = b.next;
+        }
+        return a;
+    }
+    // 求链表长度
+    public int getLength(ListNode head){
+        int length = 0;
+        for(ListNode temp = head; temp != null; temp = temp.next, length++);
+        return length;
+    }
+}
 ```
 
