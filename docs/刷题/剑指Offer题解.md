@@ -2837,3 +2837,293 @@ public class Solution {
 }
 ```
 
+## 剑指 Offer 53 - I. 在排序数组中查找数字 I
+
+统计一个数字在排序数组中出现的次数。
+
+>   示例 1:
+>
+>   输入: nums = [5,7,7,8,8,10], target = 8
+>
+>   输出: 2
+>
+>   示例 2:
+>
+>   输入: nums = [5,7,7,8,8,10], target = 6
+>
+>   输出: 0
+
+```java
+class Solution {
+    public int search(int[] nums, int target) {
+        return binarySearch(nums, target + 0.5) - binarySearch(nums, target - 0.5);
+    }
+
+    private int binarySearch(int[] nums, double target) {
+        int left = 0, right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else if (nums[mid] > target) {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+}
+```
+
+## 剑指 Offer 53 - II. 0～n-1中缺失的数字
+
+一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0～n-1之内。在范围0～n-1内的n个数字中有且只有一个数字不在该数组中，请找出这个数字。
+
+>   示例 1:
+>
+>   输入: [0,1,3]
+>
+>   输出: 2
+>
+>   示例 2:
+>
+>   输入: [0,1,2,3,4,5,6,7,9]
+>
+>   输出: 8
+
+```java
+class Solution {
+    public int missingNumber(int[] nums) {
+        // 定义左右指针分别指向数组元素值的边界。
+        int left = 0, right = nums.length;
+        while (left < right) {
+            // 找到中间值。
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > mid) {
+                // 数组索引值与索引不对应，则缺失值在左侧。
+                right = mid;
+            } else {
+                // 数组索引值等于索引，则缺失值在右侧。
+                left = mid + 1;
+            }
+        }
+        return right;
+    }
+}
+```
+
+## 剑指 Offer 54. 二叉搜索树的第k大节点
+
+给定一棵二叉搜索树，请找出其中第k大的节点。
+
+>   示例 1:
+>
+>   ```
+>   输入: root = [3,1,4,null,2], k = 1
+>      3
+>     / \
+>    1   4
+>     \
+>      2
+>   输出: 4
+>   ```
+>
+>   示例 2:
+>
+>   ```
+>   输入: root = [5,3,6,2,4,null,null,1], k = 3
+>          5
+>         / \
+>        3   6
+>       / \
+>      2   4
+>     /
+>    1
+>   输出: 4
+>   ```
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int kthLargest(TreeNode root, int k) {
+        List<Integer> result = new LinkedList<>();
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode cur = root;
+        // 中序从右向左遍历，结果存放在result中
+        while (cur != null || !stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.right;
+            }
+            cur = stack.pop();
+            result.add(cur.val);
+            cur = cur.left;
+        }
+        return result.get(k - 1);
+    }
+}
+```
+
+## 剑指 Offer 55 - I. 二叉树的深度
+
+输入一棵二叉树的根节点，求该树的深度。从根节点到叶节点依次经过的节点（含根、叶节点）形成树的一条路径，最长路径的长度为树的深度。
+
+>   例如：
+>
+>   给定二叉树 [3,9,20,null,null,15,7]，
+>
+>       	3
+>          / \
+>         9  20
+>           /  \
+>          15   7
+>
+>   返回它的最大深度 3 。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return getMaxDepth(root);
+    }
+    //获取以某节点为子树的高度
+    public int getMaxDepth(TreeNode node){
+        if(node == null){
+            return 0; //递归结束，空子树高度为0
+        }else{
+            //递归获取左子树高度
+            int l = getMaxDepth(node.left);
+            //递归获取右子树高度
+            int r = getMaxDepth(node.right);
+            //高度应该算更高的一边，（+1是因为要算上自身这一层）
+            return l > r ? (l+1) : (r+1);
+        }
+    }
+}
+```
+
+## 剑指 Offer 55 - II. 平衡二叉树
+
+输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
+
+>   示例 1:
+>
+>   给定二叉树 [3,9,20,null,null,15,7]
+>
+>       	3
+>          / \
+>         9  20
+>           /  \
+>          15   7
+>
+>   返回 true 。
+>
+>   示例 2:
+>
+>   给定二叉树 [1,2,2,3,3,null,null,4,4]
+>
+>              1
+>             / \
+>            2   2
+>           / \
+>          3   3
+>             / \
+>            4   4
+>
+>   返回 false 。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null){
+            return true;
+        }
+        //左右子树高度绝对值大于1，返回false
+        if(Math.abs(getMaxDepth(root.left)-getMaxDepth(root.right)) > 1) {
+            return false;
+        } else {
+            //递归检查左右子树
+            return isBalanced(root.left) 
+                && isBalanced(root.right);
+        }
+    }
+    //求高度
+    public int getMaxDepth(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        int left = getMaxDepth(root.left);
+        int right = getMaxDepth(root.right);
+        return left > right ? left + 1 : right + 1;
+    }
+}
+```
+
+## 剑指 Offer 56 - I. 数组中数字出现的次数
+
+一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+
+>   示例 1：
+>
+>   输入：nums = [4,1,4,6]
+>
+>   输出：[1,6] 或 [6,1]
+>
+>   示例 2：
+>
+>   输入：nums = [1,2,10,4,1,4,3,3]
+>
+>   输出：[2,10] 或 [10,2]
+
+```java
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        //用于将所有的数异或起来
+        int k = 0;
+        for(int num: nums) {
+            k ^= num;
+        }
+        //获得k中最低位的1
+        int mask = 1;
+        //mask = k & (-k) 这种方法也可以得到mask
+        while((k & mask) == 0) {
+            mask <<= 1;
+        }
+        int a = 0;
+        int b = 0;
+        for(int num: nums) {
+            if((num & mask) == 0) {
+                a ^= num;
+            } else {
+                b ^= num;
+            }
+        }
+        return new int[]{a, b};
+    }
+}
+```
+
