@@ -3109,12 +3109,15 @@ class Solution {
         }
         //获得k中最低位的1
         int mask = 1;
-        //mask = k & (-k) 这种方法也可以得到mask
+        //  所有数字异或值为 k,只要找到一个k中,位数为1的任意位号mask,显然第一位就是mask，
+        // mask这个位号表示的是那两个不重复数的二进制在这个位号上不同时为0或1的位置
         while((k & mask) == 0) {
             mask <<= 1;
         }
         int a = 0;
         int b = 0;
+        // 将mask位不为1的剔出来为一组，而另一组中必然会有mask位为1的数
+        // 这样就实现了不重复的两个数分到了不同组，而那些重复数必然被分到相同的组中，最终被抵消
         for(int num: nums) {
             if((num & mask) == 0) {
                 a ^= num;
@@ -3123,6 +3126,375 @@ class Solution {
             }
         }
         return new int[]{a, b};
+    }
+}
+```
+
+## 剑指 Offer 56 - II. 数组中数字出现的次数 II
+
+在一个数组 nums 中除一个数字只出现一次之外，其他数字都出现了三次。请找出那个只出现一次的数字。
+
+>   示例 1：
+>
+>   输入：nums = [3,4,3,3]
+>
+>   输出：4
+>
+>   示例 2：
+>
+>   输入：nums = [9,1,7,9,7,9,7]
+>
+>   输出：1
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i],map.getOrDefault(nums[i],0)+1);
+        }
+        for(Map.Entry<Integer,Integer> hashmap:map.entrySet()){
+            if(hashmap.getValue() == 1) return hashmap.getKey();
+        }
+         return -1;
+    }
+}
+```
+
+## 剑指 Offer 57. 和为s的两个数字
+
+输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+
+>   示例 1：
+>
+>   输入：nums = [2,7,11,15], target = 9
+>
+>   输出：[2,7] 或者 [7,2]
+>
+>   示例 2：
+>
+>   输入：nums = [10,26,30,31,47,60], target = 40
+>
+>   输出：[10,30] 或者 [30,10]
+
+```java
+class Solution {
+     public int[] twoSum(int[] nums, int target) {
+        // 对向双指针方式
+        int i = 0, j = nums.length - 1;
+        while(i < j) {
+            int s = nums[i] + nums[j];
+            if(s < target) 
+              i++;
+            else if(s > target) 
+              j--;
+            else 
+              return new int[]{nums[i],nums[j]};
+        }
+        return new int[0];
+    }
+}
+```
+
+## 剑指 Offer 57 - II. 和为s的连续正数序列
+
+输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
+
+序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+
+>   示例 1：
+>
+>   输入：target = 9
+>
+>   输出：[[2,3,4],[4,5]]
+>
+>   示例 2：
+>
+>   输入：target = 15
+>
+>   输出：[[1,2,3,4,5],[4,5,6],[7,8]]
+
+```java
+class Solution {
+    public int[][] findContinuousSequence(int target) {
+        List<int[]> result = new ArrayList<>();
+        int i = 1;
+        while(target > 0)
+        {
+            target -= i;
+            i++;
+            if(target>0 && target%i == 0)
+            {
+                int[] array = new int[i];
+                for(int k = target/i, j = 0; k < target/i + i; k++, j++)
+                {
+                    array[j] = k;
+                }
+                result.add(array);
+            }
+        }
+        Collections.reverse(result);
+        return result.toArray(new int[0][]);       
+    }
+}
+```
+
+## 剑指 Offer 58 - I. 翻转单词顺序
+
+输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。
+
+>   示例 1：
+>
+>   输入: "the sky is blue"
+>
+>   输出: "blue is sky the"
+>
+>   示例 2：
+>
+>   输入: "  hello world!  "
+>
+>   输出: "world! hello"
+>
+>   解释: 输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+>
+>   示例 3：
+>
+>   输入: "a good   example"
+>
+>   输出: "example good a"
+>
+>   解释: 如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        String[] a = s.split(" ");
+        StringBuffer sb = new StringBuffer();
+        for(int i = a.length - 1; i >= 0; i--){
+            if(!a[i].equals(""))  {
+                sb.append(a[i]);
+                sb.append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+}
+```
+
+## 剑指 Offer 58 - II. 左旋转字符串
+
+字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+
+>   示例 1：
+>
+>   输入: s = "abcdefg", k = 2
+>
+>   输出: "cdefgab"
+>
+>   示例 2：
+>
+>   输入: s = "lrloseumgh", k = 6
+>
+>   输出: "umghlrlose"
+
+```java
+class Solution {
+    public String reverseLeftWords(String s, int n) {
+         return s.substring(n) + s.substring(0, n);
+    }
+}
+```
+
+## 剑指 Offer 59 - I. 滑动窗口的最大值
+
+给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+
+>   示例:
+>
+>   ```
+>   输入: nums = [1,3,-1,-3,5,3,6,7], 和 k = 3
+>   输出: [3,3,5,5,6,7] 
+>   解释: 
+>     滑动窗口的位置                最大值
+>   ---------------               -----
+>   [1  3  -1] -3  5  3  6  7       3
+>    1 [3  -1  -3] 5  3  6  7       3
+>    1  3 [-1  -3  5] 3  6  7       5
+>    1  3  -1 [-3  5  3] 6  7       5
+>    1  3  -1  -3 [5  3  6] 7       6
+>    1  3  -1  -3  5 [3  6  7]      7
+>   ```
+
+```java
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int numLen = nums.length;
+        if (numLen == 0) {
+           return new int[0]; 
+        }
+        int[] ans = new int[numLen - k + 1]; // 保存结果
+        int left = 0; // 左指针
+        int right = k - 1; // 右指针
+        int max = -1; // 最大值指针
+        while (right < numLen) {
+            if (left > max) { // 更新最大值
+                max = left;
+                for (int i = left; i <= right; i++) {
+                    max = nums[max] < nums[i] ? i : max;
+                }
+            }
+            else {
+                max = nums[max] < nums[right] ? right : max; // 更新最大值
+            }
+            ans[left] = nums[max];
+            left++;
+            right++;
+        }
+        return ans;
+    }
+}
+```
+
+## 剑指 Offer 59 - II. 队列的最大值
+
+请定义一个队列并实现函数 max_value 得到队列里的最大值，要求函数max_value、push_back 和 pop_front 的均摊时间复杂度都是O(1)。
+
+若队列为空，pop_front 和 max_value 需要返回 -1
+
+>   示例 1：
+>
+>   ```
+>   输入: 
+>   ["MaxQueue","push_back","push_back","max_value","pop_front","max_value"]
+>   [[],[1],[2],[],[],[]]
+>   输出: 
+>   [null,null,null,2,1,2]
+>   ```
+>
+>
+>   示例 2：
+>
+>   ```
+>   输入: 
+>   ["MaxQueue","pop_front","max_value"]
+>   [[],[],[]]
+>   输出: [null,-1,-1]
+>   ```
+
+```java
+class MaxQueue {
+    Queue<Integer> que;
+    Deque<Integer> deq;
+
+    public MaxQueue() {
+        que = new LinkedList<>();  //队列：插入和删除
+        deq = new LinkedList<>();  //双端队列：获取最大值
+    }
+    
+    public int max_value() {
+        return deq.size() > 0 ? deq.peek() : -1;  //双端队列的队首为que的最大值
+    }
+    
+    public void push_back(int value) {
+        que.offer(value);  //value入队
+        while(deq.size() > 0 && deq.peekLast() < value){
+            deq.pollLast();  //将deq队尾小于value的元素删掉
+        }
+        deq.offerLast(value);  //将value放在deq队尾
+    }
+    
+    public int pop_front() {
+        int tmp = que.size()>0 ? que.poll() : -1;  //获得队首元素
+        if(deq.size()>0 && deq.peek().equals(tmp)){
+            deq.poll();  //如果出队的元素是当前最大值，将deq的队首出队
+        }
+        return tmp;
+    }
+}
+```
+
+## 剑指 Offer 60. n个骰子的点数
+
+把n个骰子扔在地上，所有骰子朝上一面的点数之和为s。输入n，打印出s的所有可能的值出现的概率。
+
+你需要用一个浮点数数组返回答案，其中第 i 个元素代表这 n 个骰子所能掷出的点数集合中第 i 小的那个的概率。
+
+>   示例 1:
+>
+>   ```
+>   输入: 1
+>   输出: [0.16667,0.16667,0.16667,0.16667,0.16667,0.16667]
+>   ```
+>
+>   示例 2:
+>
+>   ```
+>   输入: 2
+>   输出:[0.02778,0.05556,0.08333,0.11111,0.13889,0.16667,0.13889,0.11111,0.08333,0.05556,0.02778]
+>   ```
+
+```java
+class Solution {
+    //使得n-1点数概率数组和1点数概率数组元素两两相乘，并将乘积结果加到n点数概率数组上。
+    //运算完成后就得到了最终的n点数概率数组。
+    //比如n为4,1和1=>2,2和1=>3,3和1=>4  最终得出4中所有可能出现的和的概率
+    public double[] twoSum(int n) {
+        double pre[]={1/6d,1/6d,1/6d,1/6d,1/6d,1/6d};
+        for(int i = 2; i <= n; i++){
+            //为n的数组概率
+            double mid[] = new double[6*i - i + 1];
+            for(int j = 0; j < pre.length; j++){
+                for(int a = 0; a < 6; a++){
+                    //为(n-1)和1的数组概率计算
+                    mid[j + a] += pre[j] * (1/6d);
+                }
+            }
+            //为n-1的数组概率
+            pre = mid;
+        }
+        return pre;
+    }
+}
+```
+
+## 剑指 Offer 61. 扑克牌中的顺子
+
+从扑克牌中随机抽5张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。
+
+>   示例 1:
+>
+>   ```
+>   输入: [1,2,3,4,5]
+>   输出: True
+>   ```
+>
+>   示例 2:
+>
+>   ```
+>   输入: [0,0,1,2,5]
+>   输出: True
+>   ```
+
+```java
+class Solution {
+    public boolean isStraight(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0;
+        while(nums[count] == 0) {
+            count++;   // count为0出现的次数
+        }
+        int i = count + 1;            // i是左边第二个不为0的元素
+        for(int j = i; j < 5; j++) {
+            // dif为相邻两元素的差值
+            int dif = nums[j] - nums[j - 1];
+            // count= count-(dif-1)，用count来修补数组中不符合要求的元素
+            count = count - dif + 1;
+            // count为0表示已经用完大小王修补错误，dif=0表示存在相同元素
+            if(count < 0 || dif == 0) {
+                return false;   
+            }
+        }
+        return true;
     }
 }
 ```
