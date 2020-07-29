@@ -3672,3 +3672,271 @@ class Solution {
 }
 ```
 
+## 剑指 Offer 67. 把字符串转换成整数
+
+写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
+
+说明：
+
+假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
+
+>   ```
+>   示例 1:
+>   
+>   输入: "42"
+>   输出: 42
+>   
+>   示例 2:
+>   输入: "   -42"
+>   输出: -42
+>   解释: 第一个非空白字符为 '-', 它是一个负号。
+>        我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。
+>        
+>   示例 3:
+>   输入: "4193 with words"
+>   输出: 4193
+>   解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。
+>   
+>   示例 4:
+>   输入: "words and 987"
+>   输出: 0
+>   解释: 第一个非空字符是 'w', 但它不是数字或正、负号。
+>        因此无法执行有效的转换。
+>        
+>   示例 5:
+>   输入: "-91283472332"
+>   输出: -2147483648
+>   解释: 数字 "-91283472332" 超过 32 位有符号整数范围。 
+>        因此返回 INT_MIN (−231) 。
+>   ```
+
+```java
+class Solution {
+    public int strToInt(String str) {
+        //str为null，返回0
+        if(str == null){
+            return 0;
+        }
+        //记录当前可能的数字是正数还是负数
+        boolean positive = true;
+        //记录-、+是否出现，并且只能出现一次
+        boolean flag = true;
+        //str.trim()，去掉前后空格，其实这里应该自己写一个方法，有点偷懒了
+        char[] chs = str.trim().toCharArray();
+        //记录可能的数值
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < chs.length; i++) {
+            //正负号只能出现一次，并且前面没有数字，否则无效
+            if(sb.length() == 0 && flag && (chs[i] == '-' || chs[i] == '+')){
+                positive = chs[i] == '+';
+                flag = false;
+             //如果字符在'0'～'9'就记录当前字符
+            }else if(chs[i] >= '0' && chs[i] <= '9') {
+                sb.append(chs[i]);
+            }else {
+                //出现非正负号、数字字符，退出循环
+                break;
+            }
+        }
+        //如果没有有效的数字，返回0
+        if(sb.length() == 0) {
+            return 0;
+        }
+        String curStr = sb.toString();
+        char[] curChs = curStr.toCharArray();
+        //num类型为long，因为有可能溢出
+        long num = 0;
+        for (char ch : curChs) {
+            //num * 10 和 num * 10 + ch - '0'需要独立判断，
+            // 因为有可能num*10就溢出了，也有可能num *10 + ch - '0'才溢出（这里的溢出指超过Integer的范围）
+            if (num * 10 > Integer.MAX_VALUE || num * 10 + ch - '0' > Integer.MAX_VALUE) {
+                //溢出的话，根据正负号返回相应的极值
+                return positive ? Integer.MAX_VALUE : Integer.MIN_VALUE;
+            } else {
+                num = num * 10 + ch - '0';
+            }
+        }
+        //有效数字没有溢出，返回对应的结果
+        return positive ? (int) num : (int) -num;
+    }
+}
+```
+
+## 面试题68 - I. 二叉搜索树的最近公共祖先
+
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+最近公共祖先的定义为：对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。
+
+例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/binarysearchtree_improved.png)
+
+说明:
+
+*   所有节点的值都是唯一的。
+*   p、q 为不同节点且均存在于给定的二叉树中。
+
+>   示例 1:
+>
+>   输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+>
+>   输出: 6 
+>
+>   解释: 节点 2 和节点 8 的最近公共祖先是 6。
+>
+>   示例 2:
+>
+>   输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+>
+>   输出: 2
+>
+>   解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。
+
+解析：
+
+说明有以下几种情况：
+
+1.  二叉树本身为空，root == null ，return root
+2.  p.val == q.val ,一个节点也可以是它自己的祖先
+3.  p.val 和 q.val 都小于 root.val
+    (两个子节点的值都小于根节点的值，说明它们的公共节点只能在二叉树的左子树寻找）
+4.  p.val 和 q.val 都大于 root.val
+    (两个子节点的值都大于根节点的值，说明它们的公共节点只能在二叉树的右子树寻找）
+5.  如果上述的情况皆不满足，说明其公共节点既不在左子树也不在右子树上，只能为最顶端的公共节点，return root
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    // 递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (p.val < root.val && q.val < root.val){
+            return lowestCommonAncestor(root.left, p, q);
+        }else if (p.val > root.val && q.val > root.val){
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        return root;
+    }
+    // 非递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null){
+            if (p.val < root.val && q.val < root.val){
+                root = root.left;
+            }else if (p.val > root.val && q.val > root.val){
+                root = root.right;
+            }else{
+                break;
+            }
+        }
+        return root;
+    }
+}
+```
+
+## 面试题68 - II. 二叉树的最近公共祖先
+
+给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+例如，给定如下二叉树:  root = [3,5,1,6,2,0,8,null,null,7,4]
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/15/binarytree.png)
+
+说明:
+
+*   所有节点的值都是唯一的。
+*   p、q 为不同节点且均存在于给定的二叉树中。
+
+>   示例 1:
+>
+>   输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+>
+>   输出: 3
+>
+>   解释: 节点 5 和节点 1 的最近公共祖先是节点 3。
+>
+>   示例 2:
+>
+>   输入: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+>
+>   输出: 5
+>
+>   解释: 节点 5 和节点 4 的最近公共祖先是节点 5。因为根据定义最近公共祖先节点可以为节点本身。
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    // 递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null || root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        // 如果left为空，说明这两个节点在root结点的右子树上，我们只需要返回右子树查找的结果即可
+        if(left == null) {
+            return right;
+        }
+        if(right == null) {
+            return left;
+        }
+        // 如果left和right都不为空，说明这两个节点一个在root的左子树上一个在root的右子树上，
+        // 我们只需要返回cur结点即可。
+        return root;
+    }
+    // 非递归
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 记录遍历到的每个节点的父节点
+        Map<TreeNode, TreeNode> parent = new HashMap<>();
+        // BFS 使用队列
+        Queue<TreeNode> queue = new LinkedList<>();
+        parent.put(root, null); // 根节点没有父节点，所以为空
+        queue.add(root);
+        // 直到两个节点都找到为止
+        while (!parent.containsKey(p) || !parent.containsKey(q)) {
+            // 队列是一边进一边出，这里poll方法是出队，
+            TreeNode node = queue.poll();
+            if (node.left != null) {
+                // 左子节点不为空，记录下他的父节点
+                parent.put(node.left, node);
+                // 左子节点不为空，把它加入到队列中
+                queue.add(node.left);
+            }
+            // 右节点同上
+            if (node.right != null) {
+                parent.put(node.right, node);
+                queue.add(node.right);
+            }
+        }
+        Set<TreeNode> ancestors = new HashSet<>();
+        // 记录下p和他的祖先节点，从p节点开始一直到根节点。
+        while (p != null) {
+            ancestors.add(p);
+            p = parent.get(p);
+        }
+        // 查看p和他的祖先节点是否包含q节点，如果不包含再看是否包含q的父节点
+        while (!ancestors.contains(q)) {
+            q = parent.get(q);
+        }
+        return q;
+    }
+}
+```
+
