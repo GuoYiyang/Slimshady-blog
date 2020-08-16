@@ -31,8 +31,8 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 
 **Map**
 
--   HashMap： JDK1.8之前HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）。JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为==红黑树==，以减少搜索时间。
--   LinkedHashMap：LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，==增加了一条双向链表==，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑。
+-   HashMap： JDK1.8之前HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的（“拉链法”解决冲突）。JDK1.8以后在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。
+-   LinkedHashMap：LinkedHashMap 继承自 HashMap，所以它的底层仍然是基于拉链式散列结构即由数组和链表或红黑树组成。另外，LinkedHashMap 在上面结构的基础上，增加了一条双向链表，使得上面的结构可以保持键值对的插入顺序。同时通过对链表进行相应的操作，实现了访问顺序相关逻辑。
 -   HashTable： 数组+链表组成的，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的。
 -   TreeMap： 红黑树（自平衡的排序二叉树）
 
@@ -47,7 +47,7 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 
 **快速失败（fail—fast）**
 
-在用迭代器遍历一个集合对象时，如果遍历过程中对集合对象的内容进行了修改（增加、删除、修改），则会抛出Concurrent Modification Exception。
+**在用迭代器遍历一个集合对象时，如果遍历过程中对集合对象的内容进行了修改（增加、删除、修改），则会抛出Concurrent Modification Exception。**
 
 原理：迭代器在遍历时直接访问集合中的内容，并且在遍历过程中使用一个 modCount 变量。集合在被遍历期间如果内容发生变化，就会改变modCount的值。每当迭代器使用hashNext()/next()遍历下一个元素之前，都会检测modCount变量是否为expectedmodCount值，是的话就返回遍历；否则抛出异常，终止遍历。
 
@@ -57,7 +57,7 @@ Map是一个键值对集合，存储键、值和之间的映射。 Key无序，�
 
 **安全失败（fail—safe）**
 
-采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。
+**采用安全失败机制的集合容器，在遍历时不是直接在集合内容上访问的，而是先复制原有集合内容，在拷贝的集合上进行遍历。**
 
 原理：由于迭代时是对原集合的拷贝进行遍历，所以在遍历过程中对原集合所作的修改并不能被迭代器检测到，所以不会触发Concurrent Modification Exception。
 
@@ -113,7 +113,7 @@ Collections 工具类的 sort 方法有两种重载的形式，
 
 ### 迭代器 Iterator 
 
-Iterator 接口提供遍历任何 ==Collection== 的接口。我们可以从一个 Collection 中使用迭代器方法来获取迭代器实例。迭代器取代了 Java 集合框架中的 Enumeration，迭代器允许调用者在迭代过程中移除元素。
+Iterator 接口提供遍历任何 Collection 的接口。我们可以从一个 Collection 中使用迭代器方法来获取迭代器实例。迭代器取代了 Java 集合框架中的 Enumeration，迭代器允许调用者在迭代过程中移除元素。
 
 **单向遍历**
 
@@ -157,7 +157,7 @@ while(it.hasNext()){
 
 Java Collections 框架中提供了一个 RandomAccess 接口，用来标记 List 实现是否支持 Random Access。
 
--   如果一个数据集合实现了该接口，就意味着它支持 RandomAccess，按位置读取元素的平均时间复杂度为 ==O(1)==，如ArrayList。
+-   如果一个数据集合实现了该接口，就意味着它支持 RandomAccess，按位置读取元素的平均时间复杂度为 `O(1)`，如ArrayList。
 -   如果没有实现该接口，表示不支持 RandomAccess，如LinkedList。
 -   推荐的做法就是，支持 RandomAccess 的列表可用 for 循环遍历，否则建议用 Iterator 或 foreach 遍历。
 
@@ -173,7 +173,7 @@ ArrayList 的缺点如下：
 -   删除元素的时候，需要做一次元素复制操作。如果要复制的元素很多，那么就会比较耗费性能。
 -   插入元素的时候，也需要做一次元素复制操作，缺点同上。
 
-ArrayList 比较适合==顺序添加、随机访问==的场景。
+ArrayList 比较适合**顺序添加、随机访问**的场景。
 
 #### 数组和 List 的转换
 
@@ -188,7 +188,7 @@ ArrayList 比较适合==顺序添加、随机访问==的场景。
 -   内存空间占用：LinkedList 比 ArrayList 更占内存，因为 LinkedList 的节点除了存储数据，还存储了两个引用，一个指向前一个元素，一个指向后一个元素。
 -   线程安全：ArrayList 和 LinkedList 都是不同步的，也就是不保证线程安全。
 
-综合来说，在需要频繁读取集合中的元素时，更推荐使用 ArrayList，而在插入和删除操作较多时，更推荐使用 LinkedList。
+**综合来说，在需要频繁读取集合中的元素时，更推荐使用 ArrayList，而在插入和删除操作较多时，更推荐使用 LinkedList。**
 
 #### transient 
 
@@ -241,7 +241,7 @@ public boolean add(E e) {
 
 #### 阻塞队列BlockingQueue
 
-Java.util.concurrent.BlockingQueue是一个队列，在进行检索或移除一个元素的时候，它会等待队列变为非空；当在添加一个元素时，它会等待队列中的可用空间。BlockingQueue接口是Java集合框架的一部分，主要用于实现==生产者-消费者模式==。我们不需要担心等待生产者有可用的空间，或消费者有可用的对象，因为它都在BlockingQueue的实现类中被处理了。Java提供了集中BlockingQueue的实现，比如ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue、SynchronousQueue等。
+Java.util.concurrent.BlockingQueue是一个队列，在进行检索或移除一个元素的时候，它会等待队列变为非空；当在添加一个元素时，它会等待队列中的可用空间。BlockingQueue接口是Java集合框架的一部分，主要用于实现生产者-消费者模式。我们不需要担心等待生产者有可用的空间，或消费者有可用的对象，因为它都在BlockingQueue的实现类中被处理了。Java提供了集中BlockingQueue的实现，比如ArrayBlockingQueue、LinkedBlockingQueue、PriorityBlockingQueue、SynchronousQueue等。
 
 #### poll()和 remove()区别
 
@@ -261,7 +261,7 @@ put元素时，利用key的hashCode值计算出当前对象的元素在数组中
 
 ### put方法的具体流程
 
-put的时候，首先计算 key的hash值，这里调用了 hash方法，hash方法实际是让key.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：==高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞==。按照函数注释，因为bucket数组大小是2的幂，计算下标index = (table.length - 1) & hash，如果不做 hash 处理，相当于散列生效的只有几个低 bit 位，为了减少散列的碰撞，设计者综合考虑了之后，使用高16bit和低16bit异或来简单处理减少碰撞，而且JDK8中用了复杂度 O（logn）的红黑树结构来提升碰撞下的性能。
+put的时候，首先计算 key的hash值，这里调用了 hash方法，hash方法实际是让key.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞。按照函数注释，因为bucket数组大小是2的幂，计算下标`index = (table.length - 1) & hash`，如果不做 hash 处理，相当于散列生效的只有几个低 bit 位，为了减少散列的碰撞，设计者综合考虑了之后，使用高16bit和低16bit异或来简单处理减少碰撞，而且JDK8中用了复杂度 O（logn）的红黑树结构来提升碰撞下的性能。
 
 ### HashMap的扩容操作
 
@@ -286,7 +286,7 @@ Hash，一般翻译为“散列”，也有直接音译为“哈希”的，就�
 
 hashCode()方法返回的是int整数类型，其范围为-(2 ^ 31)~(2 ^ 31 - 1)，约有40亿个映射空间，而HashMap的容量范围是在16（初始化默认值）~2 ^ 30，HashMap通常情况下是取不到最大值的，并且设备上也难以提供这么多的存储空间，从而导致通过hashCode()计算出的哈希值可能不在数组大小范围内，进而无法匹配存储位置；
 
-所以HashMap自己实现了自己的hash()方法，通过两次扰动使得它自己的哈希值高低位自行进行异或运算，降低哈希碰撞概率也使得数据分布更平均。
+所以HashMap自己实现了自己的hash()方法，通过**两次扰动**使得它自己的哈希值高低位自行进行异或运算，降低哈希碰撞概率也使得数据分布更平均。
 
 在保证数组长度为2的幂次方的时候，使用hash()运算之后的值与运算（&）（数组长度 - 1）来获取数组下标的方式进行存储，这样一来是比取余操作更加有效率，二来也是因为只有当数组长度为2的幂次方时，h&(length-1)才等价于h%length，三来解决了“哈希值与数组大小范围不匹配”的问题；
 
@@ -316,7 +316,7 @@ JDK1.8之前采用的是拉链法。
 
 **优化hash函数**
 
-上面提到的问题，主要是因为如果使用hashCode取余，那么相当于==参与运算的只有hashCode的低位，高位是没有起到任何作用的==，所以我们的思路就是让hashCode取值出的高位也参与运算，进一步降低hash碰撞的概率，使得数据分布更平均，我们把这样的操作称为扰动，在JDK 1.8中的hash()函数如下：
+上面提到的问题，主要是因为如果使用hashCode取余，那么相当于**参与运算的只有hashCode的低位，高位是没有起到任何作用的**，所以我们的思路就是让hashCode取值出的高位也参与运算，进一步降低hash碰撞的概率，使得数据分布更平均，我们把这样的操作称为扰动，在JDK 1.8中的hash()函数如下：
 
 ```java
 static final int hash(Object key) {
@@ -334,9 +334,9 @@ static final int hash(Object key) {
 
 ### 链表成环（死循环）
 
-多线程操作HashMap时可能引起死循环。
+**多线程操作HashMap时可能引起死循环。**
 
-我先举个例子吧，我们现在往一个容量大小为2的put两个值，负载因子是0.75，2*0.75 = 1 所以插入第二个就要resize了，我们要在容量为2的容器里面用不同线程插入A，B，C，假如我们在resize之前打个短点，那意味着数据都插入了但是还没resize那扩容前可能是这样的。
+我们现在往一个容量大小为2的put两个值，负载因子是0.75，2*0.75 = 1 所以插入第二个就要resize了，我们要在容量为2的容器里面用不同线程插入A，B，C，假如我们在resize之前打个，那意味着数据都插入了但是还没resize那扩容前可能是这样的。
 
 因为resize的赋值方式，也就是使用了单链表的头插入方式，同一位置上新元素总会被放在链表的头部位置，==在旧数组中同一条Entry链上的元素，通过重新计算索引位置后，有可能被放到了新数组的不同位置上。==一旦几个线程都调整完成，就可能出现环形链表。
 
@@ -373,7 +373,7 @@ String、Integer等包装类的特性能够保证Hash值的不可更改性和计
 -   重写hashCode()是因为需要计算存储数据的存储位置，需要注意不要试图从散列码计算中排除掉一个对象的关键部分来提高性能，这样虽然能更快但可能会导致更多的Hash碰撞；
 -   重写equals()方法，需要遵守自反性、对称性、传递性、一致性以及对于任何非null的引用值x，x.equals(null)必须返回false的这几个特性，目的是为了保证key在哈希表中的唯一性；
 
-### HashMap 与 HashTable 区别
+### HashMap 与 Hashtable 区别
 
 1.  线程安全： HashMap 是非线程安全的，HashTable 是线程安全的；HashTable 内部的方法基本都经过 synchronized 修饰。（如果要保证线程安全的话就使用 ConcurrentHashMap 吧！）
 
@@ -395,7 +395,7 @@ String、Integer等包装类的特性能够保证Hash值的不可更改性和计
 
 **底层数据结构**
 
-JDK1.7的 ConcurrentHashMap 底层采用 分段的数组+链表实现，JDK1.8 采用的数据结构跟HashMap的结构一样，数组+链表/红黑二叉树。HashMap的键值对允许有null，但是ConCurrentHashMap都不允许。
+JDK1.7的 ConcurrentHashMap 底层采用分段的数组+链表实现，JDK1.8 采用的数据结构跟HashMap的结构一样，数组+链表/红黑二叉树。HashMap的键值对允许有null，但是ConCurrentHashMap都不允许。
 
 **实现线程安全的方式** 
 

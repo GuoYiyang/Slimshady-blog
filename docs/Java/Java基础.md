@@ -29,7 +29,7 @@ int y = x;         // 拆箱 调用了 X.intValue()
 new Integer(123) 与 Integer.valueOf(123) 的区别在于：
 
 -   new Integer(123) 每次都会新建一个对象；
--   Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。
+-   Integer.valueOf(123) 会使用**缓存池**中的对象，多次调用会取得同一个对象的引用。
 
 ```java
 Integer x = new Integer(123);
@@ -44,19 +44,19 @@ System.out.println(z == k);   // true
 
 基本类型对应的缓冲池如下：
 
--   boolean values true and false
--   all byte values
--   short values between -128 and 127
--   int values between -128 and 127
--   char in the range \u0000 to \u007F
+-   **boolean** values true and false
+-   **all byte** values
+-   **short** values between -128 and 127
+-   **int** values between -128 and 127
+-   **char** in the range \u0000 to \u007F
 
 >   在使用这些基本类型对应的包装类型时，如果该数值范围在缓冲池范围内，就可以直接使用缓冲池中的对象。
 
-### 字符串（String）
+### 字符串
 
 #### 概览
 
-String 被声明为 final，因此它不可被继承。(Integer 等包装类也不能被继承）
+**String 被声明为 final，因此它不可被继承。(Integer 等包装类也不能被继承）**
 
 在 Java 8 中，String 内部使用 **char 数组**存储数据。
 
@@ -92,9 +92,9 @@ public final class String
 >   因为 String 的 hash 值经常被使用，例如 String 用做 HashMap 的 key。不可变的特性可以使得 **hash 值也不可变，因此只需要进行一次计算**。
 >
 
-2.  String Pool 的需要
+2.  字符串常量池的需要
 
->   如果一个 String 对象已经被创建过了，那么就会从 String Pool 中取得引用。只有 String 是不可变的，才可能使用 String Pool。
+>   如果一个 String 对象已经被创建过了，那么就会从字符串常量池中取得引用。只有 String 是不可变的，才可能使用 String Pool。
 
 3. 安全性
 
@@ -119,7 +119,7 @@ public final class String
 
 #### String Pool
 
-字符串常量池（String Pool）**保存着所有字符串字面量（literal strings），这些字面量在编译时期就确定**。不仅如此，还可以使用 String 的 intern() 方法在**运行过程**将字符串添加到 String Pool 中。
+字符串常量池（String Pool）**保存着所有字符串字面量，这些字面量在编译时期就确定**。不仅如此，还可以使用 String 的 intern() 方法在**运行过程**将字符串添加到 String Pool 中。
 
 当一个字符串调用 intern() 方法时，如果 String Pool 中已经存在一个字符串和该字符串值相等（使用 equals() 方法进行确定），那么就会返回 String Pool 中字符串的引用；否则，就会在 String Pool 中添加一个新的字符串，并返回这个新字符串的引用。
 
@@ -134,7 +134,7 @@ String s4 = s1.intern();
 System.out.println(s3 == s4);           // true
 ```
 
->   如果是采用 "bbb" 这种字面量的形式创建字符串，会自动地将字符串放入 String Pool 中。
+>   **如果是采用 "bbb" 这种字面量的形式创建字符串，会自动地将字符串放入 String Pool 中。**
 
 ```java
 String s5 = "bbb";
@@ -160,233 +160,61 @@ public String(String original) {
 }
 ```
 
-### 运算
-
-#### 参数传递
-
-Java 的参数是以**值传递**的形式传入方法中，而不是引用传递。
-
-以下代码中 Dog dog 的 dog 是一个指针，**存储的是对象的地址**。在将一个参数传入一个方法时，本质上是将**对象的地址以值的方式**传递到形参中。
-
-```java
-public class Dog {
-
-    String name;
-
-    Dog(String name) {
-        this.name = name;
-    }
-
-    String getName() {
-        return this.name;
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    String getObjectAddress() {
-        return super.toString();
-    }
-}
-```
-
-在方法中改变对象的字段值会改变原对象该字段值，因为引用的是同一个对象。
-
-```java
-class PassByValueExample {
-    public static void main(String[] args) {
-        Dog dog = new Dog("A");
-        func(dog);
-        System.out.println(dog.getName());          // B
-    }
-
-    private static void func(Dog dog) {
-        dog.setName("B");
-    }
-}
-```
-
-但是在方法中将指针引用了其它对象，那么此时**方法里和方法外的两个指针指向了不同的对象**，**在一个指针改变其所指向对象的内容时对另一个指针所指向的对象没有影响**。
-
-```java
-public class PassByValueExample {
-    public static void main(String[] args) {
-        Dog dog = new Dog("A");
-        System.out.println(dog.getObjectAddress()); // Dog@4554617c
-        func(dog);
-        System.out.println(dog.getObjectAddress()); // Dog@4554617c
-        System.out.println(dog.getName());          // A
-    }
-
-    private static void func(Dog dog) {
-        System.out.println(dog.getObjectAddress()); // Dog@4554617c
-        dog = new Dog("B");
-        System.out.println(dog.getObjectAddress()); // Dog@74a14482
-        System.out.println(dog.getName());          // B
-    }
-}
-```
-
 ### 关键字
 
 #### final
 
-**1. 修饰数据**
+1. 修饰数据
 
-声明数据为常量，可以是编译时常量，也可以是在运行时被初始化后不能被改变的常量。
+    声明数据为常量，可以是编译时常量，也可以是在运行时被初始化后不能被改变的常量。
 
--   对于基本类型，final 使数值不变；
--   对于引用类型，final 使引用不变，也就**不能引用其它对象**，但是**被引用的对象本身是可以修改的**。
+    -   对于基本类型，final 使数值不变；
+    -   对于引用类型，final 使引用不变，也就**不能引用其它对象**，但是**被引用的对象本身是可以修改的**。
 
-```java
-final int x = 1;
-// x = 2;  // cannot assign value to final variable 'x'
-```
+2. 修饰方法
 
-**2. 修饰方法**
+    声明方法不能被子类重写。
 
-声明方法不能被子类重写。
+    **private 方法隐式地被指定为 final**，如果在子类中定义的方法和基类中的一个 private 方法签名相同，此时子类的方法不是重写基类方法，而是在子类中**定义了一个新的方法**。
 
-**private 方法隐式地被指定为 final**，如果在子类中定义的方法和基类中的一个 private 方法签名相同，此时子类的方法不是重写基类方法，而是在子类中**定义了一个新的方法**。
+3. 修饰类
 
-**3. 修饰类**
-
-声明类不允许被继承。
+    声明类不允许被继承。
 
 #### static
 
-**1. 静态变量**
+1. 静态变量
+    -   静态变量：又称为类变量，也就是说这个变量属于类的，**类所有的实例都共享静态变量，可以直接通过类名来访问它**。**静态变量在内存中只存在一份**。
+    -   实例变量：每创建一个实例就会产生一个实例变量，它与该实例同生共死。
 
--   静态变量：又称为类变量，也就是说这个变量属于类的，**类所有的实例都共享静态变量，可以直接通过类名来访问它**。**静态变量在内存中只存在一份**。
--   实例变量：每创建一个实例就会产生一个实例变量，它与该实例同生共死。
+2. 静态方法
+    -   **静态方法在类加载的时候就存在了，它不依赖于任何实例**。所以静态方法必须有实现，也就是说它**不能是抽象方法**。
+    -   **只能访问所属类的静态字段和静态方法**，方法中不能有 this 和 super 关键字，因此这两个关键字与具体对象关联。
 
-```java
-public class A {
+3. 静态语句块
+    -   静态语句块在**类初始化时运行一次**。
 
-    private int x;         // 实例变量
-    private static int y;  // 静态变量
+4. 静态内部类
 
-    public static void main(String[] args) {
-        // int x = A.x;  // Non-static field 'x' cannot be referenced from a static context
-        A a = new A();
-        int x = a.x;
-        int y = A.y;
-    }
-}
-```
+    -   非静态内部类依赖于外部类的实例，也就是说需要先创建外部类实例，才能用这个实例去创建非静态内部类,而静态内部类不需要。
 
-**2. 静态方法**
+    -   静态内部类不能访问外部类的非静态的变量和方法。
 
-**静态方法在类加载的时候就存在了，它不依赖于任何实例**。所以静态方法必须有实现，也就是说它**不能是抽象方法**。
+5. 静态导包
+    -   在使用静态变量和方法时不用再指明 ClassName，从而简化代码，但可读性大大降低。
 
-```java
-public abstract class A {
-    public static void func1(){
-    }
-    // public abstract static void func2();  
-    // Illegal combination of modifiers: 'abstract' and 'static'
-}
-```
+6. 初始化顺序
 
-**只能访问所属类的静态字段和静态方法**，方法中不能有 this 和 super 关键字，因此这两个关键字与具体对象关联。
+    -   静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序，最后才是构造函数的初始化。
 
-```java
-public class A {
-
-    private static int x;
-    private int y;
-
-    public static void func1(){
-        int a = x;
-        // int b = y;  // Non-static field 'y' cannot be referenced from a static context
-        // int b = this.y;     // 'A.this' cannot be referenced from a static context
-    }
-}
-```
-
-**3. 静态语句块**
-
-静态语句块在**类初始化时运行一次**。
-
-```java
-public class A {
-    static {
-        System.out.println("123");
-    }
-
-    public static void main(String[] args) {
-        A a1 = new A();
-        A a2 = new A();
-    }
-}
-123
-```
-
-**4. 静态内部类**
-
-非静态内部类依赖于外部类的实例，也就是说需要先创建外部类实例，才能用这个实例去创建非静态内部类。而静态内部类不需要。
-
-```java
-public class OuterClass {
-	//非静态内部类
-    class InnerClass {
-    }
-	//静态内部类
-    static class StaticInnerClass {
-    }
-
-    public static void main(String[] args) {
-        // InnerClass innerClass = new InnerClass(); 
-        // 'OuterClass.this' cannot be referenced from a static context
-        OuterClass outerClass = new OuterClass();
-        InnerClass innerClass = outerClass.new InnerClass();
-        StaticInnerClass staticInnerClass = new StaticInnerClass();
-    }
-}
-```
-
-静态内部类不能访问外部类的非静态的变量和方法。
-
-**5. 静态导包**
-
-在使用静态变量和方法时不用再指明 ClassName，从而简化代码，但可读性大大降低。
-
-```java
-import static com.xxx.ClassName.*
-```
-
-**6. 初始化顺序**
-
-静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。
-
-```java
-public static String staticField = "静态变量";
-static {
-    System.out.println("静态语句块");
-}
-public String field = "实例变量";
-{
-    System.out.println("普通语句块");
-}
-```
-
-最后才是构造函数的初始化。
-
-```java
-public InitialOrderTest() {
-    System.out.println("构造函数");
-}
-```
-
->   存在继承的情况下，初始化顺序为：
->
->   1.  父类（静态变量、静态语句块）
->   2.  子类（静态变量、静态语句块）
->   3.  父类（实例变量、普通语句块）
->   4.  父类（构造函数）
->   5.  子类（实例变量、普通语句块）
->   6.  子类（构造函数）
+    -   >   存在继承的情况下，初始化顺序为：
+        >
+        >   1.  父类（静态变量、静态语句块）
+        >   2.  子类（静态变量、静态语句块）
+        >   3.  父类（实例变量、普通语句块）
+        >   4.  父类（构造函数）
+        >   5.  子类（实例变量、普通语句块）
+        >   6.  子类（构造函数）
 
 ### Object 中的方法
 
@@ -461,7 +289,7 @@ public final void wait() throws InterruptedException
 
 **2. 等价与相等**
 
--   对于基本类型，== 判断两个值是否相等，**基本类型没有 equals() 方法**。b
+-   对于基本类型，== 判断两个值是否相等，**基本类型没有 equals() 方法**。
 -   对于引用类型，**== 判断两个变量是否引用同一个对象**，而 **equals() 判断引用的对象是否等价**。
 
 ```java
@@ -471,7 +299,7 @@ System.out.println(x.equals(y)); // true
 System.out.println(x == y);      // false
 ```
 
-**3. 实现步骤**
+**3. 手写equals（）方法**
 
 1.  检查是否为同一个对象的引用，如果是直接返回 true；
 2.  检查是否是同一个类型，如果不是，直接返回 false；
@@ -507,38 +335,17 @@ public class EqualExample {
 
 #### hashCode()
 
-hashCode() 返回哈希值，而 equals() 是用来判断两个对象是否等价。**等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价**，这是因为计算哈希值具有随机性，两个值不同的对象可能计算出相同的哈希值。
+hashCode() 返回哈希值，而 equals() 是用来判断两个对象是否等价。
+
+**等价的两个对象散列值一定相同，但是散列值相同的两个对象不一定等价**，这是因为计算哈希值具有随机性，两个值不同的对象可能计算出相同的哈希值。
 
 >   在覆盖 equals() 方法时应当总是覆盖 hashCode() 方法，保证等价的两个对象哈希值也相等。
 
 HashSet 和 HashMap 等集合类使用了 hashCode() 方法来计算对象应该存储的位置，因此要将对象添加到这些集合类中，需要让对应的类实现 hashCode() 方法。
 
-下面的代码中，新建了两个等价的对象，并将它们添加到 HashSet 中。我们希望将这两个对象当成一样的，只在集合中添加一个对象。但是 EqualExample 没有实现 hashCode() 方法，**因此这两个对象的哈希值是不同的，最终导致集合添加了两个等价的对象**。
-
-```java
-EqualExample e1 = new EqualExample(1, 1, 1);
-EqualExample e2 = new EqualExample(1, 1, 1);
-System.out.println(e1.equals(e2)); // true
-HashSet<EqualExample> set = new HashSet<>();
-set.add(e1);
-set.add(e2);
-System.out.println(set.size());   // 2
-```
-
 理想的哈希函数应当具有均匀性，即不相等的对象应当均匀分布到所有可能的哈希值上。这就要求了哈希函数要把所有域的值都考虑进来。可以将每个域都当成 R 进制的某一位，然后组成一个 R 进制的整数。
 
 R 一般取 31，因为它是一个奇素数，如果是偶数的话，当出现乘法溢出，信息就会丢失，因为与 2 相乘相当于向左移一位，最左边的位丢失。并且一个数与 31 相乘可以转换成移位和减法：`31*x == (x<<5)-x`，编译器会自动进行这个优化。
-
-```java
-@Override
-public int hashCode() {
-    int result = 17;
-    result = 31 * result + x;
-    result = 31 * result + y;
-    result = 31 * result + z;
-    return result;
-}
-```
 
 #### toString()
 
@@ -565,186 +372,19 @@ System.out.println(example.toString());	//ToStringExample@4554617c
 
 clone() 是 Object 的 protected 方法，它不是 public，**一个类不显式去重写 clone()，其它类就不能直接去调用该类实例的 clone() 方法**。
 
-```java
-public class CloneExample {
-    private int a;
-    private int b;
-}
-
-CloneExample e1 = new CloneExample();
-CloneExample e2 = e1.clone(); 	// 'clone()' has protected access in 'java.lang.Object'
-```
-
-重写 clone() 得到以下实现：
-
-```java
-public class CloneExample {
-    private int a;
-    private int b;
-
-    @Override
-    public CloneExample clone() throws CloneNotSupportedException {
-        return (CloneExample)super.clone();
-    }
-}
-
-CloneExample e1 = new CloneExample();
-
-try {
-    CloneExample e2 = e1.clone();
-} catch (CloneNotSupportedException e) {
-    e.printStackTrace();
-}
-
-//java.lang.CloneNotSupportedException: CloneExample
-```
-
-以上抛出了 `CloneNotSupportedException`，这是因为 CloneExample 没有实现 Cloneable 接口。
-
-应该注意的是，clone() 方法并不是 Cloneable 接口的方法，而是 Object 的一个 protected 方法。Cloneable 接口只是规定，如果一个类没有实现Cloneable接口又调用了clone() 方法，就会抛出 `CloneNotSupportedException`异常。
-
-```java
-public class CloneExample implements Cloneable {
-    private int a;
-    private int b;
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-}
-```
-
 **2. 浅拷贝**
 
 拷贝对象和原始对象的引用类型**引用同一个对象**。
-
-```java
-public class ShallowCloneExample implements Cloneable {
-
-    private int[] arr;
-
-    public ShallowCloneExample() {
-        arr = new int[10];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = i;
-        }
-    }
-
-    public void set(int index, int value) {
-        arr[index] = value;
-    }
-
-    public int get(int index) {
-        return arr[index];
-    }
-
-    @Override
-    protected ShallowCloneExample clone() throws CloneNotSupportedException {
-        return (ShallowCloneExample) super.clone();
-    }
-}
-
-ShallowCloneExample e1 = new ShallowCloneExample();
-ShallowCloneExample e2 = null;
-
-try {
-    e2 = e1.clone();
-} catch (CloneNotSupportedException e) {
-    e.printStackTrace();
-}
-e1.set(2, 222);
-System.out.println(e2.get(2)); // 222
-```
 
 **3. 深拷贝**
 
 拷贝对象和原始对象的引用类型**引用不同对象**。
 
-```java
-public class DeepCloneExample implements Cloneable {
-
-    private int[] arr;
-
-    public DeepCloneExample() {
-        arr = new int[10];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = i;
-        }
-    }
-
-    public void set(int index, int value) {
-        arr[index] = value;
-    }
-
-    public int get(int index) {
-        return arr[index];
-    }
-
-    @Override
-    protected DeepCloneExample clone() throws CloneNotSupportedException {
-        DeepCloneExample result = (DeepCloneExample) super.clone();
-        result.arr = new int[arr.length];
-        for (int i = 0; i < arr.length; i++) {
-            result.arr[i] = arr[i];
-        }
-        return result;
-    }
-}
-
-DeepCloneExample e1 = new DeepCloneExample();
-DeepCloneExample e2 = null;
-
-try {
-    e2 = e1.clone();
-} catch (CloneNotSupportedException e) {
-    e.printStackTrace();
-}
-e1.set(2, 222);
-System.out.println(e2.get(2)); // 2
-```
-
 **4. clone() 的替代方案**
 
 使用 clone() 方法来拷贝一个对象即复杂又有风险，它会抛出异常，并且还需要类型转换。Effective Java 书上讲到，最好不要去使用 clone()，可以使用**拷贝构造函数**或者**拷贝工厂**来拷贝一个对象。
 
-```java
-//拷贝构造函数
-public class CloneConstructorExample {
-
-    private int[] arr;
-
-    public CloneConstructorExample() {
-        arr = new int[10];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = i;
-        }
-    }
-
-    public CloneConstructorExample(CloneConstructorExample original) {
-        arr = new int[original.arr.length];
-        for (int i = 0; i < original.arr.length; i++) {
-            arr[i] = original.arr[i];
-        }
-    }
-
-    public void set(int index, int value) {
-        arr[index] = value;
-    }
-
-    public int get(int index) {
-        return arr[index];
-    }
-}
-
-CloneConstructorExample e1 = new CloneConstructorExample();
-CloneConstructorExample e2 = new CloneConstructorExample(e1);
-
-e1.set(2, 222);
-System.out.println(e2.get(2)); // 2
-```
-
-### 三大特性
+### 面向对象三大特性
 
 #### 封装
 
@@ -881,8 +521,9 @@ ac2.func1();
 
 从 Java 8 开始，**接口也可以拥有默认的方法实现**，这是因为不支持默认方法的接口的维护成本太高了。在 Java 8 之前，如果一个接口想要添加新的方法，那么要修改所有实现了该接口的类，让它们都实现新增的方法。
 
->   -   接口的成员（字段 + 方法）默认都是 public 的，并且不允许定义为 private 或者 protected
->   -   接口的字段默认都是 static 和 final 的
+>   接口的成员（字段 + 方法）默认都是 public 的，并且不允许定义为 private 或者 protected
+>
+>   接口的字段默认都是 static 和 final 的
 
 ```java
 public interface InterfaceExample {
@@ -1099,7 +740,7 @@ public static void main(String[] args) {
 
 反射可以提供运行时的类信息，并且这个类可以在运行时才加载进来，甚至在编译时期该类的 .class 不存在也可以加载进来。
 
-简而言之，通过反射，我们可以在运行时获得程序或程序集中每一个类型的成员和成员的信息。程序中一般的对象的类型都是在编译期就确定下来的，而 Java 反射机制可以动态地创建对象并调用其属性，这样的对象的类型在编译期是未知的。所以我们可以通过反射机制直接创建对象，即使这个对象的类型在编译期是未知的。
+简而言之，**通过反射，我们可以在运行时获得程序或程序集中每一个类型的成员和成员的信息**。程序中一般的对象的类型都是在编译期就确定下来的，而 Java 反射机制可以动态地创建对象并调用其属性，这样的对象的类型在编译期是未知的。所以我们可以通过反射机制直接创建对象，即使这个对象的类型在编译期是未知的。
 
 反射的核心是 JVM 在运行时才动态加载类或调用方法/访问属性，它不需要事先（写代码的时候或编译期）知道运行对象是谁。
 
@@ -1293,28 +934,3 @@ public T newInstance(Object ... initargs)
 -   **性能开销** ：反射涉及了动态类型的解析，所以 JVM 无法对这些代码进行优化。因此，反射操作的效率要比那些非反射操作低得多。我们应该避免在经常被执行的代码或对性能要求很高的程序中使用反射。
 -   **安全限制** ：使用反射技术要求程序必须在一个没有安全限制的环境中运行。如果一个程序必须在有安全限制的环境中运行，如 Applet，那么这就是个问题了。
 -   **内部暴露** ：由于反射允许代码执行一些在正常情况下不被允许的操作（比如访问私有的属性和方法），所以使用反射可能会导致意料之外的副作用，这可能导致代码功能失调并破坏可移植性。反射代码破坏了抽象性，因此当平台发生改变的时候，代码的行为就有可能也随着变化。
-
-### 异常
-
-Throwable 可以用来表示任何可以作为异常抛出的类，分为两种： **Error** 和 **Exception**。其中 Error 用来表示 JVM 无法处理的错误，Exception 分为两种：
-
--   **受检异常** ：需要用 try...catch... 语句捕获并进行处理，并且可以从异常中恢复；
--   **非受检异常** ：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。
-
-![img](https://tva1.sinaimg.cn/large/007S8ZIlgy1gf5trjerdkj31i30u012j.jpg)
-
-### 泛型
-
-```java
-public class Box<T> {
-    // T stands for "Type"
-    private T t;
-    public void set(T t) { this.t = t; }
-    public T get() { return t; }
-}
-```
-
-### 注解
-
-Java 注解是附加在代码中的一些元信息，用于一些工具在编译、运行时进行解析和使用，起到说明、配置的功能。注解不会也不能影响代码的实际逻辑，仅仅起到辅助性的作用。
-
