@@ -211,6 +211,8 @@ session 是浏览器和服务器会话过程中，服务器分配的一块储存
 
 #### 如果客户端禁止 Cookie则 Session 还能用吗？
 
+不能。
+
 Cookie 与 Session，一般认为是两个独立的东西，Session采用的是在服务器端保持状态的方案，而Cookie采用的是在客户端保持状态的方案。
 
 但为什么禁用Cookie就不能得到Session呢？因为Session是用Session ID来确定当前对话所对应的服务器Session，而Session ID是通过Cookie来传递的，禁用Cookie相当于失去了Session ID，也就得不到Session了。
