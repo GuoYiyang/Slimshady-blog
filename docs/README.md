@@ -100,6 +100,8 @@
 
 [Scala快速入门](大数据\Scala.md) 
 
+[MongoDB快速入门](大数据\MongoDB.md) 
+
 ---
 
 # 其他学习
